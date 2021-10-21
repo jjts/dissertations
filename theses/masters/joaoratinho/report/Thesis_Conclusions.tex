@@ -1,0 +1,89 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                      %
+%     File: Thesis_Conclusions.tex                                     %
+%     Tex Master: Thesis.tex                                           %
+%                                                                      %
+%     Author: Andre C. Marta                                           %
+%     Last modified :  2 Jul 2015                                      %
+%                                                                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Conclusions}
+\label{chapter:conclusions}
+
+In this thesis the simulation environment developed for the RV32-Versat architecture was 
+presented. This simulation environment presents a considerable improvement over the 
+typical simulation environments using event-driven simulators: it is faster, it is 
+inexpensive, not requiring the acquisition of licences, and allows a direct 
+implementation of software and hardware co-simulation, avoiding the use of the \ac{VPI} 
+or inefficient ad hoc solutions.
+
+This ambient was developed after a detailed study of the state of the art of 
+\ac{CPU} and \ac{CGRA} simulators, that did not only include the event-driven and 
+cycle-accurate simulators, but also included custom simulators specifically developed for 
+CGRAs. This was done to ensure that the simulation environment would correspond to the 
+defined objectives.
+
+To test the new simulation environment an application using a \ac{CNN} was developed and 
+its results were compared with the ones obtained with the RV32-Versat architecture 
+implemented in an \ac{FPGA}. This way it was possible to ensure that the results obtained 
+with the new simulation environment were correct.
+
+% ----------------------------------------------------------------------
+\section{Achievements}
+\label{section:achievements}
+
+The first achievement of this thesis was the development of a faster simulation 
+environment. As it was seen in the benchmark presented in 
+Section~\ref{section:benchmark}, this simulation environment can be up to 3.81 times 
+faster than a simulation environment using the traditional event-driven simulators. This 
+can help to cut the time needed to develop and debug applications for the RV32-Versat.
+
+Another important achievement is the reduction of the amount of money spent in licences. 
+This happens because the new simulation environment uses Verilator, an open-source 
+simulator, in contrast to the event-driven simulators that require expensive licences. 
+This is particularly useful for small companies, allowing them to spend their limited 
+resources in other areas.
+
+The third achievement is the improved support for hardware and software 
+co-simulation in this new simulation environment, dismissing the use of special 
+interfaces (like the Verilog \ac{VPI}) or ad hoc solutions. With this new environment the 
+testbench can be written in C++ or SystemC, therefore allowing a seamless integration of 
+hardware and software co-simulation.
+
+The last achievement was the development of a simulation environment that is independent 
+from eventual changes in the RV32-Versat architecture. This means that if the 
+architecture of RV32-Versat is changed, the simulation environment will keep working. 
+This would not happen if a simulator developed for this specific architecture was used, 
+instead of Verilator.
+
+% ----------------------------------------------------------------------
+\section{Future Work}
+\label{section:future}
+
+The work developed during this thesis can be developed in three different paths. The 
+first is the development of a high-level simulator for this architecture that works at 
+the functional unit level instead of the RTL. It could use a high-level simulator 
+specially developed for the Versat architecture, similarly to~\cite{chen:CGRA}, extracting
+the data from the memories and executing the desired high-level operations (no bit-level 
+operations) by reading the configuration bits. This would allow for an even better 
+performance, but it would also have a disadvantage: architecture changes in Versat would 
+also require changes in the simulator architecture. This kind of high-level approach does 
+not evaluate any kind of timing in the circuit, but this is also not needed once the 
+circuit is silicone proven and its frequency of operation is known.
+
+Another path would be to develop a software and hardware co-simulation environment for 
+this architecture using the new simulation environment that, has explained before, makes 
+this much easier. This would allow to run the software in a computer, adding a C++ class 
+to simulate the RV32-Versat hardware.
+
+The third path is a much more ambitious project: create an \ac{API} that would 
+allow to generate and simulate Versat datapaths with an almost complete abstraction from 
+the hardware. This could be done using Versat's C++ Driver, described in 
+Section~\ref{subsection:c-driver}, as a basis, adding other classes to both generate the 
+datapaths programmed in C++ and to simulate them. With this \ac{API} the whole system 
+could be evaluated just in software, therefore not needing Verilog simulators. For 
+further tests the Verilog code generated by the \ac{API} could be simulated using the 
+Verilator co-simulation capabilities or it could be used directly in an \ac{FPGA}. This 
+solution would allow to have an even faster way to simulate Versat without needing to 
+significantly change the \ac{API}.

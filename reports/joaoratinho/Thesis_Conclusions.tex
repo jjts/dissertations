@@ -1,0 +1,110 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                      %
+%     File: Thesis_Conclusions.tex                                     %
+%     Tex Master: Thesis.tex                                           %
+%                                                                      %
+%     Author: Andre C. Marta                                           %
+%     Last modified :  2 Jul 2015                                      %
+%                                                                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Conclusions}
+\label{chapter:conclusions}
+
+In this report, a study of the state-of-the-art of the current HDL simulation
+was made with the perspective of developing a new simulation environment for the
+Versat CGRA architecture, which is the subject of the thesis dissertation.
+
+The Versat architecture, a minimal CGRA with self-generated partial
+reconfiguration, has been introduced. This architecture comprises a Data Engine
+and a Configuration Module to implement the runtime reconfigurable datapaths
+characteristic of CGRAs. Versat has a complete graph topology, which allows a
+high level of configurability. Additionally, Versat features a Controller,
+Program Memory, a Register File, a DMA, in a modular setup.
+
+% ----------------------------------------------------------------------
+\section{Achievements}
+\label{section:achievements}
+
+In the analysis of the state-of-the-art of HDL simulators, two main types have
+been identified: event-driven and cycle-accurate simulators. While the
+cycle-accurate ones have the advantage of providing faster simulations, they
+have the disadvantage of not taking into account the different delays and
+propagation times inside a circuit, which makes them less reliable.
+
+The application of the two main types to CGRA simulation has been
+analyzed.  It has been concluded that event-driven simulation should be used in
+early stage development or simulation of individual modules but that for
+complete system simulation it is preferable to use cycle-accurate simulators to
+speed up verification.
+
+Lastly, high-level simulation techniques that detach themselves from the above
+traditional techniques have been discussed and two different approaches to this
+topic have been presented. They bring the advantage of simulating the CGRA
+behaviour from a higher level than traditional RTL simulators, evaluating just
+the signals exchanged between the different functional units, instead of also
+looking to the intermediate signals.
+
+Through this work, not only was it possible to study and understand the
+advantages and disadvantages of the different RTL simulators, but it was also
+possible to assess their performance, by analysing the results in~\cite{verilator:benchmarks,chen:CGRA}. From these benchmarks it was seen that
+Verilator, an open source cycle-accurate simulator, has a clear advantage over
+the other commercially available HDL simulators.
+
+The candidate spent a considerable time working with Versat in the scope of an
+industrial internship at company IObundle, Lda, and participated in a project
+with a real customer. In this project the candidate programmed Versat in
+assembly participating in the acceleration of MP3 encoding. This experience is
+invaluable for making correct design choices when developing the Versat
+simulation environment.
+
+% ----------------------------------------------------------------------
+\section{Future Work}
+\label{section:future}
+
+The work to be developed in the thesis consists in creating a simulation
+environment for the Versat architecture. This simulation environment must be
+faster than the one that is currently used (based on NCsim), allowing for fast
+software development and debugging before running it on an FPGA for more
+exhaustive testing. This way, the environment that is going to be developed will
+be based in Verilator, given its performance advantage over the other
+simulators. The work that will be performed is shown in Table~\ref{tab:planning},
+together with the scheduling for each task.
+
+\begin{table}[!htbp]
+	\centering
+	\caption{Planning of the work that will be performed in the thesis}
+	\label{tab:planning}
+	\begin{tabular}{|p{8cm}|l|}
+		\hline
+		\textbf{Work Planning}                                                                            & \textbf{Scheduling} \\
+		\hline
+		Study Verilator documentation                                                                     & 18/02 - 22/02       \\
+		\hline
+		Perform simulations with Verilator using simple circuits                                          & 23/02 - 04/03       \\
+		\hline
+		Study the changes needed to the simulation environment in order to simulate Versat with Verilator & 05/03 - 09/03       \\
+		\hline
+		Apply the changes and perform the first simulations                                               & 10/03 - 10/04       \\
+		\hline
+		Create a testbench for the simulation environment                                                 & 11/04 - 29/04       \\
+		\hline
+		Test \& Debug the simulation environment                                                          & 30/04 - 20/05       \\
+		\hline
+		Write the Thesis report                                                                           & 21/05 - 01/07       \\
+		\hline
+	\end{tabular}
+\end{table}
+
+A high-level simulator that works at the functional unit level instead of the
+RTL is going to be developed by another student. It will use a high-level
+simulator specially developed for the Versat architecture, similarly to~\cite{chen:CGRA}, extracting the data from the memories and executing the
+desired high-level operations (no bit-level operations) by reading the
+configuration bits. This will allow for an even better performance but also has
+a disadvantage: architecture changes in Versat would also require changes in the
+simulator architecture. Note that Verilator is excellent at solving this problem
+%JTS: faltou dizer atrás que o verilator compila um simulador para cada circuito a simular.
+as RTL changes can simply be recompiled. This kind of high-level approach does
+not evaluate any kind of timing in the circuit, but this is also not needed once
+the circuit is silicone proven and its frequency of operation is known.
+

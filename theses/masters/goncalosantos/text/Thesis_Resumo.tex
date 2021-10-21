@@ -1,0 +1,54 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                      %
+%     File: Thesis_Resumo.tex                                          %
+%     Tex Master: Thesis.tex                                           %
+%                                                                      %
+%     Author: Gonçalo Santos                                           %
+%     Last modified : 20 Oct 2018                                      %
+%                                                                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Resumo}
+
+% Add entry in the table of contents as section
+\addcontentsline{toc}{section}{Resumo}
+
+% Inserir o resumo em Portugu\^{e}s aqui com o máximo de 250 palavras e acompanhado de 4 a 6 palavras-chave...
+Nos últimos anos, a computação reconfigurável tem recebido grande atenção,
+pois permite mudar a arquitetura dinamicamente.
+{\it Versat} é uma dessas arquiteturas reconfiguráveis.
+O objetivo deste trabalho é fornecer um compilador da linguagem
+{\bf C} para o {\it picoVersat}, o controlador do {\it Versat}.
+O {\it picoVersat} possui um conjunto muito reduzido de instruções,
+realizando cálculos simples e controlando os subsistemas a ele ligados. %61
+Foi escolhido o compilador {\bf lcc} porque permite múltiplos processadores
+alvo, está bem documentado e utiliza uma ferramenta de
+seleção das instruções, facilitando o processo de geração de código. %88
+Cada processador alvo do {\bf lcc} é configurado por uma estrutura
+que parameteriza o gerador alvo.
+A reserva de registos pode ajustar-se às caraterísticas de cada processador
+e uma árvore gramatical permite descrever a maioria das operações,
+associando-lhes um custo. %127
+Consegue-se a otimização da seleção de instruções fornecendo diferentes
+combinações de árvores gramaticais com custos distintos.
+As instruções mais complexas podem ser codificadas manualmente, tal como o
+registo de ativação das funções. %160
+Adicionou-se ao {\bf lcc} a geração direta de instruções em {\it assembly},
+pois não é uma função {\sc ANSI} {\bf C}. % 177
+Como o {\it Versat} é configurado através da escrita em posições específicas
+de memória, o seu controlo realiza-se com simples instruções de
+atribuição em {\bf C}. %201
+Foram realizados testes extensivos ao compilador num ambiente de
+desenvolvimento integrado.
+O compilador realizado permite controlar o {\it Versat} numa linguagem
+de alto-nível.
+O número reduzido de instruções disponíveis no {\it picoVersat} implica
+que as operações na pilha, como manipulação de argumentos e funções,
+resulta em longas sequências de instruções. %249
+
+\vfill
+
+\textbf{\Large Palavras-chave:} Versat, CGRA, picoVersat, compilador de C, geração de código com lcc.
+
+\cleardoublepage
+

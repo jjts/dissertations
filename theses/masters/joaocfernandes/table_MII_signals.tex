@@ -1,0 +1,86 @@
+\begin{table}[h]
+\centering
+\caption{Media Independent Interface Signals}
+\label{table:MII-Table}
+\begin{tabular}{c c l}
+\hlinew{0.08cm}
+\cellformatrG{}&
+\cellformatlrG{}&
+\cellformatlG{}
+\\
+\cellformatrG{\multirow{-2}{2cm}{\centering Signals}} &
+\cellformatlrG{\multirow{-2}{2cm}{\centering Direction}} &
+\cellformatlG{\multirow{-2}{2cm}{\centering Description}}
+\\
+\hlinew{0.04cm}
+\greyrow \multicolumn{3}{c}{Transmit}
+\\
+\hlinew{0.04cm}
+\cellformatrW{ TX\_CLK }& 
+\cellformatlrW{ input }&
+Clock signal reference for the transmit signals
+\\
+\hlinew{0.04cm}
+\cellformatrW{ TX\_EN }& 
+\cellformatlrW{ output }&
+MAC is presenting data on the MII for transmission
+\\
+\hlinew{0.04cm}
+\cellformatrW{ TX\_D[3:0] }& 
+\cellformatlrW{ output }&
+Transmit Data
+\\
+\hlinew{0.04cm}
+\cellformatrW{ TX\_ER }& 
+\cellformatlrW{ output  }&
+MAC Signals the transmission of a coding error on the frame
+\\
+%\multicolumn{3}{c}{\vspace*{-0.3cm}}\\
+%%%%%%%%%%%%% SECOND PART OF THE TABLE %%%%%%%%%%%%%%%%%%%%%%%%
+%\hlinew{0.08cm}
+%\cellformatrG{}&
+%\cellformatlrG{}&
+%\cellformatlG{}
+%\\
+\hlinew{0.04cm}
+\greyrow  \multicolumn{3}{c}{ Receive }\\
+\hlinew{0.04cm}
+\cellformatrW{ RX\_CLK }& 
+\cellformatlrW{ input }&
+Clock signal reference for the receive signals
+\\
+\hlinew{0.04cm}
+\cellformatrW{ RX\_DV }& 
+\cellformatlrW{ input}&
+MII is presenting data to the MAC
+\\
+\hlinew{0.04cm}
+\cellformatrW{ RX\_D[3:0] }& 
+\cellformatlrW{ input }&
+Receive Data
+\\
+\hlinew{0.04cm}
+\cellformatrW{ RX\_ER }& 
+\cellformatlrW{ input  }&
+PHY signals the transmission of error on the frame
+\\
+%\multicolumn{3}{c}{\vspace*{-0.3cm}}\\
+%%%%%%%%%%%%% Third PART OF THE TABLE %%%%%%%%%%%%%%%%%%%%%%%%
+%\hlinew{0.08cm}
+%\cellformatrG{}&
+%\cellformatlrG{}&
+%\cellformatlG{}
+%\\
+\hlinew{0.04cm}
+\greyrow \multicolumn{3}{c}{Management }\\
+\hlinew{0.04cm}
+\cellformatrW{ MDC}& 
+\cellformatlrW{ input }&
+Management data clock
+\\
+\hlinew{0.04cm}
+\cellformatrW{ MDIO}& 
+\cellformatlrW{ output }&
+Management data input/output
+\end{tabular}
+\end{table}

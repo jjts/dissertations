@@ -1,0 +1,39 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                      %
+%     File: Thesis_Abstract.tex                                        %
+%     Tex Master: Thesis.tex                                           %
+%                                                                      %
+%     Author: Andre C. Marta                                           %
+%     Last modified :  2 Jul 2015                                      %
+%                                                                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Abstract}
+
+% Add entry in the table of contents as section
+\addcontentsline{toc}{section}{Abstract}
+
+This thesis presents a new simulation environment for the RV32-Versat system
+using the Verilator simulation framework. The RV32-Versat system consists of the
+PicoRV32 RISC-V processor connected to the Versat \ac{CGRA} architecture. This new 
+simulation environment presents significant advantages over
+the typical simulation environments using commercial event-driven
+simulators. The first advantage is speed: the new environment is considerably
+faster, therefore saving valuable time when developing applications for the
+RV32-Versat architecture. The second advantage is cost: Verilator is available
+under a free open-source licence, while the typical event-driven simulators
+require very expensive licences, hard to justify for small companies and
+projects. The third and last advantage is the easy support for hardware and
+software co-simulation. The event-driven simulators are lacking in this field,
+but the new environment using Verilator solves this problem, allowing a seamless
+integration through C++ or SystemC. This new simulation environment is the
+result of a detailed study of the state of the art of \ac{CPU} and \ac{CGRA}
+simulation and the RV32-Versat architecture, also presented in this thesis.
+
+\vfill
+
+\textbf{\Large Keywords:}  Coarse-Grain Reconfigurable Arrays, Simulation Environment, 
+Verilator, CGRA Simulation, High-Level Simulation, 
+Co-Simulation
+
+

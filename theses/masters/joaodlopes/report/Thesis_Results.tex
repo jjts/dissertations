@@ -1,0 +1,474 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                      %
+%     File: Thesis_Results.tex                                         %
+%     Tex Master: Thesis.tex                                           %
+%                                                                      %
+%     Author: João D. Lopes                                            %
+%     Last modified :  9 September 2017                                %
+%                                                                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Results}
+\label{chapter:results}
+
+In this chapter, experimental results for the Versat architecture are
+presented and discussed. First, the implementation results for Versat
+in FPGA, as well as in ASIC technology are presented. Then,
+performance and energy consumption results, both for simple and more
+complex computational kernels, are given. To end the chapter, Versat
+is compared to other CGRAs.
+
+% ----------------------------------------------------------------------
+\section{FPGA implementation results}
+\label{section:FPGAresults}
+
+The FPGA implementation results for Versat are given in
+Table~\ref{tabFPGAr}. These results show that in terms of size, Versat
+is able to be implemented in the smallest FPGAs: in a Xilinx XC5VLX50T
+device of the Virtex V family (the one that is present on the Xilinx
+ML505 board), Versat occupies half of the logic resources; in an
+Altera Cyclone IV EP4CE22F17C6N device (present on Altera DE0 Nano
+board), Versat takes about $80\%$ of the logic resources. The Xilinx
+implementation makes better use of the RAM resources for implementing
+the configuration memory than the Altera device. This explains why the
+Xilinx implementation consumes more RAM memory but less logic (LookUp
+Tables or LUTs), while the Altera device consumes more Logic Elements
+(LEs) and less RAM. This is also reflected in the frequency of
+operation, although the fact that two different architectures are
+being compared is also important; the Virtex V architecture can
+generally achieve higher frequencies of operation compared to the
+Cyclone IV architecture. Nevertheless, it is a fact that the current
+Versat implementation is not very well optimized in terms of the
+maximum frequency of operation, but more work can be done on this once
+it becomes a priority.
+
+\begin{table}[!htb]
+  \renewcommand{\arraystretch}{1.2} % more space between rows
+  \caption{FPGA implementation results.}
+  \label{tabFPGAr}
+  \centering
+  \begin{tabular}{lccccc}
+    \toprule
+    Architecture &      Logic & Regs & RAM(kB) &        Mults & Fmax(MHz)\\
+    \midrule
+    Cyclone IV   & 19366  LEs & 4673 &   43.88 & 32  (9 bits) &  64\\
+    Virtex V     & 12510 LUTs & 4396 &  132.75 & 16 (18 bits) & 102\\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+% ----------------------------------------------------------------------
+\section{ASIC implementation results}
+\label{section:ASICresults}
+
+Versat has been designed using a UMC $130nm$
+process. Table~\ref{tabASICr} compares Versat with a state-of-the-art
+embedded processor (ARM Cortex A9) and two other CGRA implementations
+(Morphosys~\cite{Lee00} and ADRES~\cite{Mei05}). The cores are
+compared in terms of the technology node (Node), silicon area (Area),
+embedded memory (RAM), frequency of operation (Frequency) and power
+consumption (Power). The Versat frequency and power results have been
+obtained using the Cadence IC design tools, and the node activity rate
+extracted from simulating an FFT kernel.
+
+\begin{table}[!htb]
+  \renewcommand{\arraystretch}{1.2} % more space between rows
+  \caption{ASIC implementation results.}
+  \label{tabASICr}
+  \centering
+  \begin{tabular}{lccccc}
+    \toprule
+    Core & Node(nm) & Area(mm\textsuperscript{2}) & RAM(kB) &  Freq.(MHz) & Power(mW)\\
+    \midrule
+    ARM Cortex A9~\cite{wang} &  40 & 4.6 & 65.54 & 800 &  500 \\
+    Morphosys~\cite{Lee00}    & 350 & 168 &  6.14 & 100 & 7000 \\
+    ADRES~\cite{Mei05}        &  90 &   4 & 65.54 & 300 &   91 \\
+    Versat                    & 130 & 5.2 & 46.34 & 170 &  132 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Because the different designs use different technology nodes, it is
+difficult to compare the results in Table~\ref{tabASICr}. In order to
+facilitate the comparisons, the results are scaled to the $40nm$
+technology node and presented in Table~\ref{tabASICrs}. The scaling is
+performed as explained in~\cite{borkar99}.
+
+\begin{table}[!htb]
+  \renewcommand{\arraystretch}{1.2} % more space between rows
+  \caption{ASIC implementation results scaled to $40nm$.}
+  \label{tabASICrs}
+  \centering
+  \begin{tabular}{lcccc}
+    \toprule
+    Core & Area(mm\textsuperscript{2}) & RAM(kB) &  Freq.(MHz) & Power(mW)\\
+    \midrule
+    ARM Cortex A9~\cite{wang} &  4.6 & 65.54 & 800 & 500 \\
+    Morphosys~\cite{Lee00}    & 2.19 &  6.14 & 875 & 800 \\
+    ADRES~\cite{Mei05}        & 0.79 & 65.54 & 675 &  40 \\
+    Versat                    & 0.49 & 46.34 & 553 &  41 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+The results show that Versat is the smallest core, and compared with
+the ARM processor it is $9\times$ smaller. The ADRES architecture is
+about twice the size of Versat and Morphosys is much larger, about
+half the size of the ARM processor. These differences can be explained
+by the different capabilities of these cores. While Versat has a
+16-instruction controller and 11 FUs (excluding the memory units),
+ADRES has a VLIW processor and a 4x4 FU array, and Morphosys has a
+RISC processor and an 8x8 FU array.
+
+In terms of embedded memory, Versat uses somewhat less memory than the
+ARM Cortex A9 or ADRES cores, but its memory size ($46kB$) can be
+considered typical for an embedded processor. Morphosys uses a lot
+less memory, as it is designed to focus more on processing power and
+less on storage capabilities.
+
+The ARM core operation frequency can be considered low as this is a
+power optimized version. Other versions of this core operating at
+higher frequencies exist, but the area footprint is larger and the
+power consumption is higher. Those versions are optimized for
+performance rather than power. Among the three CGRAs, Versat is the
+least optimized in terms of the working frequency. In fact, not too
+much effort has been put into achieving timing closure for a higher
+frequency. Notwithstanding, after analyzing the critical paths, it
+became clear that there is plenty of room for optimization, so its
+frequency can be considered comparable to the other CGRAs.
+
+As far as power is concerned, Morphosys consumes more than the ARM
+core. Again, this is the result of focusing in performance with a
+large array of FUs. The ADRES architecture seems well optimized for
+power, in spite of its cycle by cycle and progressive reconfiguration
+scheme. However, the acceleration that can be achieved with ADRES is
+not clearly documented in its publications~\cite{Mei05}. Versat
+consumes about the same power as the ADRES core, but there is also
+room for improvement, given the little effort spent so far in
+low-level power optimization.
+
+% ----------------------------------------------------------------------
+\section{Execution results}
+\label{section:executionResults}
+
+In this section, Versat is compared with a state-of-the-art embedded
+processor in terms of performance and energy comsumption by running a
+set of example kernels on Versat and on the embedded processor. The
+results are divided in two parts: simple and complex kernels. In the
+simple kernels part, all tests operate on vector sizes of 1024, while
+in complex kernels part, larger data sets are used. All data is in
+32-bit fixed-point format. A hardware timer has been used to measure
+the time in elapsed clock cycles. To end this section, results that
+show why self-generated configurations are better than pre-compiled
+stored configurations are presented.
+
+In order to assess the performance of the Versat architecture, the
+Zybo Zynq-7000 ARM/FPGA SoC development board, featuring a Xilinx Zynq
+7010 FPGA and a dual-core embedded ARM Cortex A9 system, has been
+used. Versat is connected as a peripheral to the ARM system using its
+AXI4 slave interface. The ARM system comprises a memory controller for
+accessing an external DDR3 module. Versat can also access this memory
+controller by connecting its AXI4 master interface to an appropriate
+AXI4 slave interface on the ARM system. The Zybo development board has
+been used only to measure the number of clock cycles for executing
+each kernel. The speedup was estimated using the following equation:
+
+\begin{equation}
+Speedup = \frac{t_{ARM}\times f_{Versat}}{t_{Versat}\times f_{ARM}},
+\label{eq:speedup}
+\end{equation}
+where $t_{ARM}$ and $t_{Versat}$ are the execution cycle count for the
+ARM and Versat, repectively, and $f_{ARM}$ and $f_{Versat}$ are their
+clock frequency in the $40nm$ process, according to
+table~\ref{tabASICrs}. The energy ratio was estimated by multiplying
+their execution time by their respective power consumption figure also
+given in table~\ref{tabASICrs}:
+
+\begin{equation}
+Energy~Ratio = \frac{P_{ARM}}{P_{Versat}} \times Speedup.
+\label{eq:energyRatio}
+\end{equation}
+
+% ----------------------------------------------------------------------
+\subsection{Performance and energy consumption results for simple kernels}
+\label{subsection:ResultsSimpleKernels}
+
+Results for the set of simple kernels are summarized in
+Table~\ref{tabExecR}. These kernels use a single Versat configuration
+(no reconfiguration or reuse of data already in the accelerator), in
+order to get base values for performance and energy consumption. In
+the next subsection, it will be shown that with massive reconfigurations
+and data reuse, performance and energy use improve significantly.
+
+The results compare the performance of the Versat core with the
+performance of the ARM Cortex A9 core. The kernels are the following:
+{\tt vadd} is a vector addition, {\tt iir1} and {\tt iir2} are $1^{st}$
+and $2^{nd}$ order IIR filters and {\tt cdp} is a dot (inner) product of
+two complex vectors. All kernels operate on Q1.31 fixed-point data
+with vector sizes of 1024.
+
+For both systems, the program has been placed in on-chip memory and
+the data in the external DDR3 memory device. The {\em ARM} column
+denotes the execution cycle count for the ARM core. The {\em Versat}
+column gives the total cycle count for the Versat core, including data
+transfer, processing, control and reconfiguration. The {\em Control}
+column gives the unhidden control and reconfiguration cycles, that is,
+the number of these cycles that do not occur in parallel with the
+execution of the DE or DMA. The number of FUs used (column {\em
+  \#FUs}) and the code size in bytes (column {\em Code Size}) are also
+given for each kernel. The speedup and energy ratio have been obtained
+assuming the ARM and the Versat cores are running at the frequencies
+and power figures given in Table~\ref{tabASICrs} for the $40nm$
+technology node (equations~\ref{eq:speedup}
+and~\ref{eq:energyRatio}). The speedup (column {\em Speedup}) is the
+ARM/Versat ratio of execution times. (The execution time is given by
+the cycle count divided by the frequency of operation.) The energy
+ratio (column {\em Energy Ratio}) is the energy spent by the ARM
+processor divided by the energy spent by the Versat core. The consumed
+energy is given by the execution time multiplied by the respective
+power consumption figure.
+
+\begin{table}[!htb]
+  \renewcommand{\arraystretch}{1.2} % more space between rows
+  \caption{Simple kernel results.}
+  \label{tabExecR}
+  \centering
+  \begin{tabular}{lccccccc}
+    \toprule
+    Kernel & ARM & Versat & Control & \#FUs & Code Size & Speedup & Energy Ratio\\
+    \midrule
+    {\tt vadd} & 14726 &  4517 & 36 &  4 & 152 & 2.25 & 27.44\\
+    {\tt iir1} & 18890 &  7487 & 26 &  5 & 220 & 1.74 & 21.22\\
+    {\tt iir2} & 24488 & 10567 & 26 & 11 & 332 & 1.60 & 19.51\\
+    {\tt cdp}  & 25024 &  6673 & 26 & 14 & 408 & 2.59 & 31.59\\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+From these results the main conclusion is that while the achievable
+speedups are modest, the energy gains are very significant for these
+single configuration kernels. This makes Versat a very attractive
+accelerator for high performance battery operated devices. The only
+requisite is that the vectors are long enough to justify the transfer
+of data in and/or out of Versat. Although not shown by the above
+results, the data transfer time dominates. For example, the {\tt vadd}
+kernel processing time is only 1090 cycles and the remaining 3427
+cycles account for data transfer and control.
+
+The number of FUs used is low for the {\tt vadd} and {\tt iir1}
+kernels. The {\tt vadd} kernel could perform multiple additions in
+parallel but it is not necessary as a single ALU is enough to hide the
+data transfer time if streaming the vectors. If the data were already
+in the DE then multiple ALUs in parallel would accelerate the
+processing time. The {\tt iir2} and {\tt cdp} kernels use more FUs
+as they require more computations per vector element.
+
+The {\em Control} number of cycles is low for all examples, which
+shows that the configuration of the DE can be accomplished almost
+completely while the DMA is running. Configuration can also be done
+while the DE is running, as will be shown in the next subsection where
+runtime reconfiguration is considered. In any case, the configuration
+overhead is low.
+
+Given the simplicity of the examples, their code size, in the order of
+hundreds of bytes, is small. Many of these simple kernels can be
+placed in the $8kB$ program memory and invoked when necessary.
+
+% ----------------------------------------------------------------------
+\subsection{Performance and energy consumption results for complex kernels}
+\label{subsection:ResultsComplexKernels}
+
+In this subsection, three more complex kernels, that demand self and
+partial reconfiguration, are presented. The number of reconfigurations
+is high and the kernels operate for a long time on the data fetched
+from the external memory and/or produced by themselves. In these
+examples the data transfer time is less significant. The examples are
+the following:
+\begin{itemize}
+\item 1D-Convolution (conv-1D): very popular in applications such as
+  Convolutional Neural Networks;
+\item Fast Fourier Transform (FFT): very common in digital signal
+  processing (see section~\ref{section:FFT});
+\item K-Means Clustering algorithm (K-Means): widely used in Big Data
+  applications (see section~\ref{section:kmeans}).
+\end{itemize}
+
+These examples are {\em parameterizable} and the parameters are passed
+by the host processor using the CRF. The algorithm that runs on Versat
+processes the parameters and generates configurations
+accordingly. This would be hard to achieve with statically compiled
+configurations and demonstrates the strength of self-generated
+configurations. Partial reconfigurations are equally important
+since they reduce considerably the reconfiguration time.
+
+Results for 3 particular instances of the conv-1D, FFT and K-Means
+algorithms are detailed in Table~\ref{tabExecR2}. The conv-1D result
+was obtained by running the kernel on a dataset of $10^6$ points
+applying 1-D convolution on a 256-point sliding window. The FFT result
+pertains a 16384-point window size with a $50\%$ overlap over a
+dataset of $10^6$ complex points. The K-Means result has been obtained
+for one iteration over a dataset of $1.36 \times 10^6$ points of 30
+dimensions and 34 centroids.
+
+\begin{table}[!htb]
+  \renewcommand{\arraystretch}{1.2} % more space between rows
+  \caption{Complex kernel results.}
+  \label{tabExecR2}
+  \centering
+  \begin{tabular}{lcccccc}
+    \toprule
+    Kernel & ARM & Versat & \#FUs & Code Size & Speedup & Energy Ratio\\
+    \midrule
+    {\tt conv-1D} & 2.26G & 104.51M & 13   &  668 & 14.95 & 182.32\\
+    {\tt FFT}     & 1.28G &  34.50M & 12   & 3492 & 25.65 & 312.80\\
+    {\tt K-Means} & 9.02G &   1.64G & 12.5 & 2764 &  3.8  &  46.28\\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+These results show that the speedup and energy efficiency improve with
+the complexity of the kernels when compared to the simpler kernels in
+the previous subsection. This has to do with the number of operations
+done in parallel in the DE, but also with the number of DE
+configurations that can be executed without fetching or saving new
+data in the external memory. The K-Means algorithm fetches a new
+datapoint chunk and applies 2 DE configurations: one for performing
+datapoint classification and the other to update the centroid
+positions. As for the FFT and conv-1D, after fetching a datapoint
+chunk, several configurations are applied corresponding to the several
+FFT stages, in case of the FFT and a window computation, in case of
+conv-1D. The datapaths for these kernels also expose a higher ILP and
+DLP in its computations. Hence, the speedup and energy efficiency of
+the FFT and conv-1D are much higher when compared to the K-Means
+algorithm. All these algorithms illustrate the power of using the
+Versat CGRA compared to the ARM processor.
+
+\subsubsection{Conv-1D results}
+
+In the conv-1D kernel, the only parameterizable parameter is the
+window size. Versat/ARM speedup results are shown in
+figure~\ref{fig:convsu}.  The window size is varied from 32 to 1024
+and is increased by powers of 2. All datapoints, from the first data
+chunk, are multiplied by the sliding window coefficients and
+accumulated. Then Versat reconfigures itself to advance to the next
+window and the process repeats until the window is slid over all
+datapoints.
+
+\begin{figure}[!htb]
+  \centering \includegraphics[width=0.55\textwidth]{drawings/speedupConv.eps}
+  \caption{Conv-1D: speedup vs. window size.}
+  \label{fig:convsu}
+\end{figure}
+
+As the sliding window size increases, the ARM core can better hide the
+time needed to store the computed values while the Versat core keeps
+its execution time linear on the window size. This causes a slight
+speedup drop, from $16.3$ to $15.2$, as shown in the figure. Due to
+the small size of the data chunks, the size of the internal memories
+is adequate for both cores.
+
+\subsubsection{FFT results}
+
+The FFT kernel can be parameterized with the following parameters: the
+number of datapoints, window size (must be a power of 2) and window
+overlap size. The algorithm computes the FFT successively, for the
+points in the sliding window, advancing the window for a number of
+points given by the window size minus the overlap size. In
+figure~\ref{fig:fftsu}, the Versat/ARM speedup is shown as a function of
+the window size for 1 million datapoints and a half window ($50\%$)
+overlap.
+
+\begin{figure}[!htb]
+  \centering \includegraphics[width=0.55\textwidth]{drawings/speedup3.eps}
+  \caption{FFT: speedup vs. window size.}
+  \label{fig:fftsu}
+\end{figure}
+
+Initially, as the sliding window size reaches the capacity of the
+Versat memories, the speedup drops, while the ARM core uses its data
+cache and pre-fetch mechanism to sustain its performance. However, as
+the window size further increases, the ARM core reaches its own
+internal memory limitations for streaming data, and the speedup
+increases steadily again after that.
+
+\subsubsection{K-Means Clustering results}
+
+The parameters that can be passed to the K-Means Clustering kernel are
+the following: the number of datapoints, number of dimensions and
+number of centroids. In figure~\ref{fig:timeVSdpts}, it is shown how
+the time for one iteration varies with the number of datapoints for a
+fixed number of dimensions and centroids. The results are given for
+both cores using logarithmic scales.
+
+\begin{figure}[!htb]
+  \centering \includegraphics[width=0.55\textwidth]{drawings/points.eps}
+  \caption{K-Means: iteration time vs. number of datapoints, for 30 dimensions and 34 centroids.}
+  \label{fig:timeVSdpts}
+\end{figure}
+
+These results show that for both systems the execution time scales
+linearly with the number of datapoints. The Versat/ARM average speedup
+is $3.8$, taking into account the number of clock cycles and the
+working frequencies of the cores (Table~\ref{tabASICrs}). Despite the
+modest speedup achieved in the K-Means Clustering algorithm, a
+considerable amount of energy can be saved.
+
+Each point requires the DE to be reconfigured twice to apply the
+Assignment and Update steps. Since this algorithm is applied to
+millions of points then Versat is reconfigured millions of times at
+runtime. There is no reconfiguration overhead, as all reconfigurations
+are done while the DE or DMA is running.
+
+\subsection{Generated versus stored configurations}
+
+To show that using self-generated configurations has advantage
+compared to storing all configurations in the external memory,
+consider the K-Means Clustering kernel for instance.
+
+This algorithm is especially useful when applied to large data
+sets. In the implementation above it has been chosen to apply it to
+millions of datapoints. Since for this algorithm Versat
+self-reconfigures for each point, then millions of configurations are
+needed. Since one configuration uses 672 bits then 672Mbits are needed
+only for configurations, much more than needed to store the program
+itself which generates the configurations.
+
+For algorithms that require a number of configurations tied to the
+dataset size, pre-compiling and storing all configurations becomes
+simply not practical. Even for the FFT kernel that only requires 43
+configurations, it can be proved that the self-generated version is
+marginally more efficient and has smaller memory footprint than the
+stored configurations version. Therefore, self-generated
+configurations is a good technique for CGRAs.
+
+
+% ----------------------------------------------------------------------
+\section{Comparing with other CGRAs}
+\label{subsection:OtherCGRAs}
+
+It is difficult to compare the Versat performance with the other
+CGRAs. Published results always omit important information, and it is
+hard to ascertain the conditions under which they have been
+obtained. A possible solution would be to replicate the other
+approaches in order to make fair comparisons. However, CGRAs are
+complex cores and implementing them from their descriptions in
+research papers, besides representing a formidable effort, is not
+guaranteed to yield trustworthy results, as some important details
+could be missed.
+
+Notwithstanding, Versat can be compared with Morphosys for the FFT
+kernel, since it is reported in~\cite{Kamalizad03} that the processing
+time for a 1024-point FFT is 2613 cycles. Compared with the 12115
+cycles taken by Versat, Morphosys is $4.6\times$ faster on this kernel
+at the same operating frequency. This is not surprising, since
+Morphosys has 64 FUs compared to only 11 FUs in Versat; Morphosys is
+$4.5\times$ the size of Versat according to
+Table~\ref{tabASICrs}. Using the frequency and power figures, it can
+be derived that Morphosys uses $2.66\times$ more energy than Versat
+for the FFT kernel.
+
+Despite ADRES being one of the most cited CGRA architectures,
+comparisons with this architecture could not be made, since the
+execution times for the examples used in its publications have not
+been given in absolute terms.
+

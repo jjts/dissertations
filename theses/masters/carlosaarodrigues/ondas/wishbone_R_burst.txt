@@ -1,0 +1,14 @@
+{ "signal" : [
+  { "name": "Clock", "wave": "p..|.....", "period":2},
+  { "name": "icfsm_burst", "wave": "0.1|....0", "period":2},
+  { "name": "biu_dat_i", "wave": "x..|.....", "period":2},
+  { "name": "biu_adr_i", "wave": "x=.|.===x", "period":2, data: ["0000D650     ", "0000D654",  "0000D658",  "0000D65C"]},
+  { "name": "biu_cyc_i", "wave": "0.1|....0", "period":2},
+  { "name": "biu_stb_i", "wave": "0.1|....0", "period":2},
+  { "name": "biu_we_i", "wave": "0..|.....", "period":2},
+  { "name": "biu_sel_i", "wave": "x=.|....x", "period":2, data: ["F"]},
+  { "name": "biu_cab_i", "wave": "0.1|....0", "period":2},
+  { "name": "biu_dat_o", "wave": "x..|====x", "period":2, data: ["10000006", "15000000", "9C63FFFF", "BC430001"]},
+  { "name": "biu_ack_o", "wave": "x0.|1...0", "period":2},
+  { "name": "biu_err_o", "wave": "0..|.....", "period":2}
+]}

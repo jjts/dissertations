@@ -1,0 +1,204 @@
+\chapter{Simulating The RV32-Versat Architecture Using Event-Driven Simulators}
+\label{chapter:sim_event}
+
+In this chapter, the simulation environment for the RV32-Versat architecture
+using commercially available event-driven simulators, more specifically the
+Cadence NCsim and Synopsys VCS simulators, is detailed. As explained in the
+previous chapter, event-driven simulators work by taking events sequentially,
+propagating them through the circuit until the circuit reaches a steady
+state~\cite{tan:vhstas,gunes:survey,palnitkar:verilog}. They produce accurate
+simulation results with detailed timing information at the cost of the
+simulation speed.
+
+\section{Testbench}
+\label{section:tb}
+
+This type of simulators work with testbenches written in an \ac{HDL} such as
+Verilog or VHDL. In Figure~\ref{fig:tb_verilog}, an example of a simple
+testbench written in Verilog and used by NCSim and VCS is shown. This testbench
+has RV32-Versat as the \ac{UUT} and uses a clock period of 10 ns, meaning that
+the system is simulated at a frequency of 100 MHz. After 100 clock cycles with
+the reset enabled ({\tt resetn=0}) the reset is disabled, and RV32-Versat starts
+running. The data bus external ports are not used, since the memories are
+initialized at compile time and no input hex file is loaded by the
+testbench. The simulation finishes when the trap signal is activated (with {\tt
+  resetn=0}), and if the flag VCD is passed when running the simulator a \ac{VCD}
+file will be generated. The trap signal is activated when there is an invalid
+memory access, which is useful for debug and for stopping the simulation, which
+is caused by the user software that intentionally accesses the memory at a non
+mapped location.
+
+\lstset{language=verilog}
+\begin{figure}[!htb]
+	\begin{minipage}{\linewidth}
+		\begin{spacing}{0.7}
+			\begin{lstlisting}
+			`timescale 1 ns / 1 ps
+			
+			module system_tb;
+				reg clk = 1;
+				always #5 clk = ~clk;
+				
+				reg resetn = 0;
+				
+				initial begin
+					`ifdef VCD
+						$dumpfile("system.vcd");
+						$dumpvars();
+					`endif
+					repeat (100) @(posedge clk);
+					resetn <= 1;
+				end
+				
+				wire          led;
+				wire          ser_tx;
+				wire          trap;
+				reg           databus_sel;
+				reg           databus_rnw;
+				reg [14:0]    databus_addr;
+				reg [31:0]    databus_data_in;
+				
+				system uut (
+					.clk             (clk        ),
+					.resetn          (resetn     ),
+					.led             (led        ),
+					.databus_sel     (databus_sel),
+					.databus_rnw     (databus_rnw),
+					.databus_addr    (databus_addr),
+					.databus_data_in (databus_data_in),
+					.ser_tx          (ser_tx     ),
+					.trap            (trap       )
+				);
+				
+				initial begin
+					databus_sel = 0;
+					databus_rnw = 1;
+					databus_addr = 0;
+					databus_data_in = 0;
+				end
+				
+				always @(posedge clk) begin
+					if (resetn && trap) begin
+						$finish;
+					end
+				end
+			endmodule
+			\end{lstlisting}
+		\end{spacing}
+	\end{minipage}
+	\vspace*{-10mm}
+	\caption{Example testbench in Verilog for RV32-Versat.}
+	\label{fig:tb_verilog}
+\end{figure}
+
+\section{Verilog VPI}
+\label{section:vpi}
+
+The downside of using an HDL testbench with the event-driven simulators is their
+limited support for software and hardware co-simulation. One way to overcome
+this problem is to use the \ac{VPI}~\cite{vpi}, a C-programming interface for
+Verilog that consists in a set of access and utility routines that are called
+from standard C programming language functions. These routines interact with the
+instantiated simulation objects contained in the Verilog design.
+
+\lstset{language=C}
+\begin{figure}[!htb]
+	\begin{minipage}{\linewidth}
+		\begin{spacing}{0.7}
+			\begin{lstlisting}
+			#include "vpi_user.h"
+			
+			void example() {
+				vpi_printf("Example function\n");
+				return;
+			}
+			\end{lstlisting}
+		\end{spacing}
+	\end{minipage}
+	\vspace*{-10mm}
+	\caption{Example C code for VPI.}
+	\label{fig:vpi_c}
+\end{figure}
+
+To better explain how the~\ac{VPI} works there is a simple example of a C
+function in Figure~\ref{fig:vpi_c}, called {\tt example.c} that prints text in
+the terminal, using the {\tt printf} function from the \ac{VPI}. This function
+now needs to be associated with a system task. For this, a special data
+structure needs to be created, of the type {\tt vpi\_systf\_data}. The code for
+the creation and registration of the system task can be seen in
+Figure~\ref{fig:vpi_routine}. After this stage, the system task must be called
+in the Verilog testbench of the circuit to simulate. This can be done either in
+{\tt initial} blocks or in {\tt always} blocks. In Figure~\ref{fig:vpi_verilog}
+an example using an {\tt initial} block is shown. The last thing to do is
+linking the task with the simulator. This is usually made in the terminal when
+calling the simulator.
+
+\lstset{language=C}
+\begin{figure}[!htb]
+	\begin{minipage}{\linewidth}
+		\begin{spacing}{0.7}
+			\begin{lstlisting}
+			#include "example.c"
+			
+			void hello_register()
+			{
+				s_vpi_systf_data tf_data; //data structure
+			
+				tf_data.type      = vpiSysTask; //does not return value
+				tf_data.tfname    = "$hello"; //name of the task
+				tf_data.calltf    = hello_calltf; //pointer for this routine
+				tf_data.compiletf = hello_compiletf; //pointer for the compiled instance
+																	  //of the task
+
+				vpi_register_systf(&tf_data); //pointer to the structure
+			}
+			
+			//Register the new task
+			void (*vlog_startup_routines[ ]) () = {
+				hello_register,
+				0
+			;}
+			
+			\end{lstlisting}
+		\end{spacing}
+	\end{minipage}
+	\vspace*{-10mm}
+	\caption{VPI task creation and registration.}
+	\label{fig:vpi_routine}
+\end{figure}
+
+\lstset{language=Verilog}
+\begin{figure}[!htb]
+	\begin{minipage}{\linewidth}
+		\begin{spacing}{0.7}
+			\begin{lstlisting}
+			module example ();
+			
+			initial begin
+				$hello;
+				#10 $finish;
+			end
+			   	  
+			endmodule
+			\end{lstlisting}
+		\end{spacing}
+	\end{minipage}
+	\vspace*{-10mm}
+	\caption{Verilog code to invoke the task.}
+	\label{fig:vpi_verilog}
+\end{figure}
+
+As it can be seen, although it is possible to do software and hardware
+co-simulation using Verilog testbenches, the process is not direct, making it a
+disadvantage in simulation environments based on event-driven simulators. If the
+low performance of this type of simulators is also taken into account (as it can
+be seen in the benchmarks in Section~\ref{section:benchmark}), it can be
+concluded that a simulation environment based on event-driven simulators does
+not reach the objectives pretended: it is not fast, the simulators licences are
+expensive and it does not provide a straightforward way of integrating hardware
+and software co-simulation. Therefore, an alternative is necessary.  There is
+another event-driven simulator (Icarus Verilog) that could solve the cost
+problems, since it is free, but this simulator does not support the {\tt
+  generate} loops used in the RV32-Versat Verilog code and has a very low
+performance, as seen in Section~\ref{section:performance}.
+

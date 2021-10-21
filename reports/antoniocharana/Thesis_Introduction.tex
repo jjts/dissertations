@@ -1,0 +1,198 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                      %
+%     File: Thesis_Introduction.tex                                    %
+%     Tex Master: Thesis.tex                                           %
+%                                                                      %
+%     Author: Andre C. Marta                                           %
+%     Last modified :  2 Jul 2015                                      %
+%                                                                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Introduction}
+\label{chapter:introduction}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Motivation}
+\label{section:motivation}
+
+With the advent of portable devices such as smartphones, tablets and others,
+there has been a high demand for low power CPUs, in order to meet stringent
+battery life specifications. As the world market of portables devices grows and
+the Internet of Things (IoT) emerges, hardware developers need to focus more and more
+on efficient low power processor cores to be integrated in SoCs that have very
+narrow specifications for power, area and performance.
+
+Having just one or two providers of CPU cores, such as ARM, cannot satisfy the
+enormous appetite of many smaller businesses and consultancies who may and
+effectively can provide services in this domain. Therefore, open source
+processor cores are the way to go since the CPU is one of the most complex parts
+of the system but is also a commodity which, by itself, adds little value to the
+final product. In this context, after previous attempts such as the OpenRISC
+experience, the RISC-V architecture finally emerged and promises to become for
+hardware what the Linux operating system is for software. The Internet of Things
+is a promising market for the future and is one of the main targets of many
+innovative startups that use open source hardware and software components for
+development. SoCs are typically embedded in larger systems, so companies
+nowadays tend to specialize their development in very particular systems and/or
+applications, which are then licensed to other companies as intellectual
+property (IP).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Problem}
+\label{section:problem}
+
+Having access to a complete enough set of hardware and software building blocks
+to build useful systems is either too expensive or time consuming, which is a
+huge barrier for startups to initiate their business. In the prequel of the IoT
+era, the semiconductor IP market must change in order to allow smaller startups
+to have some share of it. The entry of such new companies in this market is
+imperative because the size of the future IoT market will simply be too big for
+only a few large companies in the world to satisfy the brutal global demand on
+extremely dedicated and complex IoT systems.
+
+However, this also means that the IoT market will be extremely competitive. For
+a company to survive in it, it will need to be able to produce high quality
+hardware and software systems in a short window of time and budget, which may
+seem a difficult task for small startups.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Solution}
+\label{section:solution}
+
+Therefore, for the IoT revolution to finally trigger off, it is indispensable
+that an Instruction Set Architecture (ISA) free of intellectual property and
+licensing fees is made available to companies and their engineers, so that they
+can fully unleash their creativity in designing innovative systems without
+having to worry about such legal aspects of the semiconductor IP market and
+consuming the scarce funds they have available~\cite{bib:isafree}. Such an ISA
+is provided by the RISC-V initiative.
+
+Hence, the creation of a development environment for SoCs using RISC-V cores is
+an asset in a such a company, as it saves time wasted in developing these
+extremely dedicated systems which would otherwise take too much time to develop
+if an open source CPU was not made available in the first place. This way, the
+majority of the company's resources can be focused on developing higher level
+and innovative systems for the particular application they commit to work on,
+without wasting time and money creating a processor core from scratch or paying
+companies like ARM to license them their CPUs.
+
+Previous attempts to create SoCs along with their respective development
+environments have been made by the same research team that currently is hosting 
+the author and that has spun off company IObundle, Lda, also a stakeholder in this 
+project. The first approach was made in~\cite{bib:blackbird}, using an OpenRISC open 
+source processor to build an SoC called Blackbird and a programming environment with
+the purpose of building reconfigurable systems based on it. However, this
+OpenRISC approach was eventually put aside due to the lack of some essential
+parts of the system, which made the team realize that it was not worth the
+effort.
+
+Recently, a new attempt was made in~\cite{bib:warpbird}, which introduced Warpbird,
+whose ambition was to become one of the first untethered SoCs built with open
+source components. Realizing the limitations of the OpenRISC initiative, the
+team opted to use the open source RISC-V toolchain. Concretely, they used the
+Chisel3 Hardware Description Language (HDL)~\cite{bib:chisel3}, allowing
+a higher-level description of complex systems, and the Rocket Chip
+generator~\cite{bib:rocketchip}, which converts the Chisel3 description of a
+system to Verilog code, which in turn is converted to a C++ or SystemC
+equivalent cycle-accurate behavioral model using Verilator~\cite{bib:verilator},
+useful for simulation purposes. The use of the Rocket (Chip) framework reduced
+the effort of building a RISC-V based SoC significantly. However, the project
+budget ran out before its conclusion because the fundamental components of the
+SoC, after being synthesized and implemented down to bitstream, faced some
+unexpected problems in the FPGA emulation phase. There were also some
+peripherals that were still in development which ultimately remained unfinished.
+
+The work to be done and described in this document can be considered a
+continuation of what was done in~\cite{bib:blackbird} and~\cite{bib:warpbird}. A
+new solution using a different RISC-V core architecture will be considered, as
+well as an Ethernet interface instead of a JTAG module in order to speed up
+program data transfers from the host computer to the base SoC, which will be
+named \socname for future reference in this document.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Objectives}
+\label{section:objectives}
+
+This project's main objective is to create an environment which allows a company
+to fully develop SoCs using RISC-V processor cores and other open source
+components in a reasonable time frame, such that it does not have to license
+these IP from third parties, and is more able to develop their systems in time.
+
+In order to achieve this goal, the first step to take is to build the \socname
+System on Chip using the size-optimized RISC-V CPU known as
+PicoRV32~\cite{bib:picorv32}. Afterwards, it will be necessary to understand how
+to add, remove and/or modify hardware and software components and develop an
+environment which allows this process to be made with the maximum ease possible,
+so to assure that developers can work fast. Then, a test environment is to be
+built so that the components added to the SoC can be properly tested with RTL
+simulation and FPGA emulation. Finally, both these environments should be
+integrated in a single development environment that comprises the entire flow of
+the SoC's building process.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Author's work}
+\label{section:authorswork}
+
+
+The work to be done during the master thesis will be the continuation of the
+works presented in~\cite{bib:blackbird,bib:warpbird}, which were carried out at
+IObundle, Lda, a Portuguese company based in Lisbon and spun off by the INESC-ID
+research institute, and that designs semiconductor IP. The author started a
+professional internship at IObundle in October 2018, where he has done research
+on the RISC-V ISA and open source RISC-V processor cores that will be useful to
+build the \socname System on Chip and the development environment during
+the dissertation project. The author aided the Versat~\cite{bib:versat} team at
+IObundle to attach a UART core to the Versat architecture, managed to install
+the toolchain necessary to use the PicoRV32 RISC-V processor architecture
+~\cite{bib:picorv32} and synthesized a simple CPU + memory system using a
+PicoRV32 core to have an early estimate of its size, based on the FPGA resources
+usage report.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Outline}
+\label{section:outline}
+
+This document has four more chapters besides this introductory one. A brief
+description of the topics addressed in each of these chapters follows.
+
+\begin{itemize}
+\item Chapter~\ref{chapter:socdesign} consists on a research regarding processor
+  architectures and SoCs. A comparison between Complex Instruction Set Computer
+  (CISC) and Reduced Instruction Set Computer (RISC) architectures is presented,
+  highlighting the main differences between the two within the scope of SoC
+  development and showing why RISC architectures are preferred for the goals of
+  this project. A description of the RISC-V ISA and its main extensions is
+  provided, while explaining which ones should be used for SoC development
+  and why. Next, some state-of-the-art methods for building SoCs are referred
+  and the \socname System on Chip is described. Its components' roles in the SoC
+  are explained.
+
+\item Chapter~\ref{chapter:environment} will cover the development environment
+  to be built. First, the verification environment is presented and its novelties
+  in respect to~\cite{bib:warpbird} are highlighted. Next, the several parts of the 
+  SoC development flow are identified and described. Throughout this description, 
+  it is referred how the toolchain is installed on the host machine, which of its 
+  parts are used in each development phase and how they are used. Next, the SoC test 
+  and verification environments developed in the previous iterations of the project
+  at hand~\cite{bib:blackbird,bib:warpbird} are analyzed. A base concept of the
+  development environment to be built is presented, based on \socname's
+  structure and interfaces.
+
+\item Chapter~\ref{chapter:results} demonstrates some preliminary results of the
+  synthesis of a simple CPU + memory system in PicoRV32's GitHub
+  repository~\cite{bib:picorv32}.
+
+\item Chapter~\ref{chapter:conclusions} contains some conclusions of the
+  research described throughout the remaining chapters of this document. A
+  summary of the achievements made with this research is made and some future
+  work is outlined. The planning of the tasks to be carried out in the dissertation
+  project is also presented.
+\end{itemize}
+

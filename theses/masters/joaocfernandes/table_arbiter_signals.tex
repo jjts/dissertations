@@ -1,0 +1,77 @@
+\begin{table}[h]
+\centering
+\caption{Arbiter Input and Output Signals}
+\label{table:Arbiter Signals}
+\begin{tabular}{c c l}
+\hlinew{0.08cm}
+\cellformatrG{}&
+\cellformatlrG{}&
+\cellformatlG{}
+\\
+\cellformatrG{\multirow{-2}{2cm}{\centering Signals}} &
+\cellformatlrG{\multirow{-2}{2cm}{\centering Direction}} &
+\cellformatlG{\multirow{-2}{2cm}{\centering Description}}
+\\
+\hlinew{0.04cm}
+\greyrow \multicolumn{3}{c}{CWDP}
+\\
+\hlinew{0.04cm}
+\cellformatrW{ busy }& 
+\cellformatlrW{ input }&
+Signals that the \ac{CWDP} TX unit is being used.
+\\
+\hlinew{0.04cm}
+\cellformatrW{ cwdp\_sent }& 
+\cellformatlrW{ input }&
+Signals that the packet was sent.
+\\
+%\multicolumn{3}{c}{\vspace*{-0.3cm}}\\
+%%%%%%%%%%%%% SECOND PART OF THE TABLE %%%%%%%%%%%%%%%%%%%%%%%%
+%\hlinew{0.08cm}
+%\cellformatrG{}&
+%\cellformatlrG{}&
+%\cellformatlG{}
+%\\
+\hlinew{0.04cm}
+\greyrow  \multicolumn{3}{c}{ CW-Link 0 }\\
+\hlinew{0.04cm}
+\cellformatrW{ active\_unit\_tx[0] }& 
+\cellformatlrW{ output }&
+Activates the CW-Link 0 unit.
+\\
+\hlinew{0.04cm}
+\cellformatrW{ busy\_cwlink\_0 }& 
+\cellformatlrW{ input}&
+Signals that the CW-Link 0 is busy.
+\\
+\hlinew{0.04cm}
+\cellformatrW{ cw\_req\_vector\_TX\_0 }& 
+\cellformatlrW{ input }&
+Signals that the Cw-Link 0 is requesting access.
+\\
+%\multicolumn{3}{c}{\vspace*{-0.3cm}}\\
+%%%%%%%%%%%%% SECOND PART OF THE TABLE %%%%%%%%%%%%%%%%%%%%%%%%
+%\hlinew{0.08cm}
+%\cellformatrG{}&
+%\cellformatlrG{}&
+%\cellformatlG{}
+%\\
+\hlinew{0.04cm}
+\greyrow  \multicolumn{3}{c}{ CW-Link 1 }\\
+\hlinew{0.04cm}
+\cellformatrW{ active\_unit\_tx[1] }& 
+\cellformatlrW{ output }&
+Activates the CW-Link 1 unit.
+\\
+\hlinew{0.04cm}
+\cellformatrW{ busy\_cwlink\_1 }& 
+\cellformatlrW{ input}&
+Signals that the CW-Link 1 is busy.
+\\
+\hlinew{0.04cm}
+\cellformatrW{ cw\_req\_vector\_TX\_1 }& 
+\cellformatlrW{ input }&
+Signals that the Cw-Link 1 is requesting access.
+\\
+\end{tabular}
+\end{table}

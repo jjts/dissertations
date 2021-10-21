@@ -1,0 +1,36 @@
+[submodule "theses/masters/valtermario"]
+	path = theses/masters/valtermario
+	url = https://bitbucket.org/vjbmario/deep-versat.git
+[submodule "theses/masters/acharana"]
+	path = theses/masters/acharana
+	url = git@bitbucket.org:acharana/docs
+[submodule "theses/phd/jdlopes"]
+	path = theses/phd/jdlopes
+	url = git@bitbucket.org:JDLopes/docs.git
+[submodule "theses/masters/pmiranda"]
+	path = theses/masters/pmiranda
+	url = git@bitbucket.org:P_Miranda/master-thesis.git
+[submodule "theses/masters/amerendeira"]
+	path = theses/masters/amerendeira
+	url = git@github.com:AndreMerendeira/thesis.git
+[submodule "theses/masters/jroque"]
+	path = theses/masters/jroque
+	url = git@bitbucket.org:JVRoque/thesis-jroque.git
+[submodule "theses/masters/joaofreirecardoso"]
+	path = theses/masters/joaofreirecardoso
+	url = git@bitbucket.org:nikrard/thesis.git
+[submodule "theses/masters/mserodio"]
+	path = theses/masters/mserodio
+	url = git@bitbucket.org:jjts/unum.git
+[submodule "theses/masters/dgarigali"]
+	path = theses/masters/dgarigali
+	url = git@github.com:dgarigali/thesis_report.git
+[submodule "theses/masters/hgoncalves"]
+	path = theses/masters/hgoncalves
+	url = git@github.com:hlvs-gnc/Thesis-MPEG.git
+[submodule "papers/journals/yolo2021"]
+	path = papers/journals/yolo2021
+	url = https://git.overleaf.com/60257efc35265f56c4f19036
+[submodule "theses/masters/pteixeira"]
+	path = theses/masters/pteixeira
+	url = git@github.com:pedrompt97/master_thesis.git

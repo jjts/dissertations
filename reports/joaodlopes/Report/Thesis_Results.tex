@@ -1,0 +1,280 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                      %
+%     File: Thesis_Results.tex                                         %
+%     Tex Master: Thesis.tex                                           %
+%                                                                      %
+%     Author: João D. Lopes                                            %
+%     Last modified :  3 June 2016                                     %
+%                                                                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Results}
+\label{chapter:results}
+
+%% rever
+This chapter presents results on implementing Versat on FPGA, as well
+as on ASIC technology. Performance results comparing Versat to an FPGA
+embedded processor (Microblaze, from Xilinx) and to an ARM Cortex A9
+system are also presented.
+
+
+% ----------------------------------------------------------------------
+\section{FPGA implementation results}
+\label{subsection:FPGAresults}
+
+Versat's FPGA implementation results are given in
+Table~\ref{tabFPGAr}. These results show that in terms of size, Versat
+can fit in the smallest FPGAs: in a Xilinx XC5VLX50T device of the
+Virtex V family, Versat occupies half of the logic resources; in an
+Altera Cyclone IV EP4CE22F17C6N device, Versat takes about 80\% of the
+logic resources. The Xilinx implementation makes better use of the RAM
+resources for implementing the configuration memory than the Altera
+device. This explains why the Xilinx implementation consumes more RAM
+memory but less logic (LookUp Tables or LUTs) and the Altera device
+consumes more Logic Elements (LEs) and less RAM. This is also
+reflected in the frequency of operation, although the fact that we are
+comparing two different architectures also plays an important role in
+this difference, since the Virtex V architecture is known to achieve
+higher frequencies of operation compared to the Cyclone IV
+architecture.  Nevertheless, it is a fact that the current Versat
+implementation is not very well optimized in terms of maximum
+frequency of operation and more work can be done on this once it
+becomes a priority.
+
+
+\begin{table}[!htb]
+  \renewcommand{\arraystretch}{1.2} % more space between rows
+  \caption{FPGA implementation results}
+  \label{tabFPGAr}
+  \centering
+  \begin{tabular}{lccccc}
+    \toprule
+    Architecture & Logic & Regs & RAM(KB) & Mults & Fmax(MHz)\\
+    \midrule
+    Cyclone IV &  19366 LEs & 4673 &  43.88 & 32 (9 bits)  & 64 \\
+    Virtex V   & 12510 LUTs & 4396 & 132.75 & 16 (18 bits) & 102\\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+%Insert your section material and possibly a few figures...
+
+%Make sure all figures presented are referenced in the text!
+
+% ----------------------------------------------------------------------
+\section{ASIC implementation results}
+\label{subsection:ASICresults}
+
+Versat has been designed using a UMC 130nm
+process. Table~\ref{tabASICr} compares Versat with a state-of the-art
+embedded processor and two other CGRA implementations. The Versat
+frequency and power results have been obtained using the Cadence IC
+design tools, and the node activity rate extracted from simulating an
+FFT kernel.
+
+\begin{table}[!htb]
+  \renewcommand{\arraystretch}{1.2} % more space between rows
+  \caption{ASIC implementation results}
+  \label{tabASICr}
+  \centering
+  \begin{tabular}{lccccc}
+    \toprule
+    Core & Node(nm) & Area(mm\textsuperscript{2}) & RAM(KB) &  Freq.(MHz) & Power(mW)\\
+    \midrule
+    ARM Cortex A9~\cite{wang} &  40 & 4.6 & 65.54 & 800 &  500 \\
+    Morphosys~\cite{Lee00}    & 350 & 168 &  6.14 & 100 & 7000 \\
+    ADRES~\cite{Mei05}        &  90 &   4 & 65.54 & 300 &   91 \\
+    Versat                    & 130 & 4.2 & 46.34 & 170 &   99 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Because the different designs use different technology nodes, to
+compare the results in Table~\ref{tabASICr}, we need to use a scaling
+method. A standard scaling method is to assume that the area scales
+with the square of the feature size and that the power density remains
+constant at constant frequency. Doing that we conclude that Versat is
+the smallest and least power hungry of the CGRAs. If Versat were
+implemented in the 40nm technology, it would occupy about 0.4
+mm\textsuperscript{2}, and consume about 44mW running at a frequency
+of 800MHz. That is, Versat is 10x smaller and consumes about 11x less
+power compared with the ARM processor.
+
+The ADRES architecture is about twice the size of Versat. Morphosys is
+the biggest one, occupying half the size of the ARM processor. These
+differences can be explained by the different capabilities of these
+cores. While Versat has a 16-instruction controller and 11 FUs
+(excluding the memory units), ADRES has a VLIW processor and a 4x4 FU
+array, and Morphosys has a RISC processor and an 8x8 FU array.
+
+
+% ----------------------------------------------------------------------
+\section{Execution results}
+\label{subsection:executionResults}
+
+The execution results of running a set of example kernels on Versat
+and on a embedded processor are divided in two parts: 1) Versat is
+compared with Microblaze (Xilinx embedded processor); 2) Versat is
+compared with an ARM Cortex A9 system embedded in a Zynq FPGA. In both
+cases a hardware timer has been used to measure the time in elapsed
+clock cycles. All kernels used for tests operate on vector sizes of 1024.
+The {\tt lpf}, {\tt lpf2} and {\tt fft} kernels use Q1.31 fixed-point format.
+
+\subsection{Comparing with the Microblaze processor}
+
+The execution results using Microblaze for comparison are given in
+Table~\ref{tabExecR}. The Microblaze and Versat programs are initially
+placed in their local on-chip memories. Microblaze is configured with
+a 32KB one-way data cache. In Table~\ref{tabExecR}, column {\it MB1}
+gives the clock cycle counts for MicroBlaze when the data is placed in
+external memory, column {\it MB2} gives the clock cycle counts for
+MicroBlaze when the data is placed in the cache, column {\it Versat1}
+gives the cycle counts for Versat when the data is placed in external
+memory and column {\it Versat2} gives the Versat cycles when the data
+is placed in the DE memories. Two speedup results are presented:
+Speedup1 is the speedup including data transfer time and Speedup2 is
+the speedup excluding data transfer time. Comparing these two speedups
+one can have an idea of the overhead of moving data.
+
+\begin{table}[!htb]
+  \renewcommand{\arraystretch}{1.2} % more space between rows
+  \caption{Execution results using Microblaze for comparison}
+  \label{tabExecR}
+  \centering
+  \begin{tabular}{lccccccc}
+    \toprule
+    Kernel & MB1 & MB2 & Versat1 & Versat2 & Speedup1 & Speedup2\\
+    \midrule
+    {\tt vec\_add} &  11356 &   6147 &  4517 &  1090 &   2.51 &  5.64\\
+    {\tt lpf1}     &  15311 &  10756 &  7487 &  5205 &   2.05 &  2.07\\
+    {\tt lpf2}     &  20644 &  16388 & 10567 &  8310 &   1.95 &  1.97\\
+    {\tt cdp}      &  25110 &  12292 &  6673 &  2185 &   3.76 &  5.63\\
+    {\tt fft}      & 260226 & 238749 & 16705 & 12115 &  15.58 & 19.71\\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Kernel {\tt vec\_add} is a vector addition, {\tt lpf1} and {\tt lpf2}
+are $1^{st}$ and $2^{nd}$ order IIR filters, {\tt cdp} is a complex
+dot (inner) product and {\tt fft} is a Fast Fourier Transform. The
+first 4 kernels use a single Versat configuration. The {\tt fft}
+kernel uses multiple Versat configurations.
+
+In terms of performance results, kernel {\tt vec\_add} is a fully
+pipelined kernel and produces one vector element result per cycle. It
+can be accelerated 5.64x in Versat but if the data is transferred into
+Versat just for running this kernel then the acceleration is only
+2.51x. The processing time is only 1090 cycles and the remaining 3427
+cycles account for data transfer and control.  This means that if the
+data is already in the Microblaze data cache it may not be worth it to
+run this kernel on Versat. On the other hand, if this datapath is part
+of a larger kernel where the data is already in the Versat memories,
+it becomes advantageous to use Versat.
+
+Kernels {\tt lpf1} and {\tt lpf2} have similar acceleration of about
+2x with or without the data in cache. This is because the acceleration
+in moving the data is similar to the processing acceleration. Thus it
+always pays off to have these kernels executed in Versat. The modest
+yet effective speedup is due to the feedback loops needed to implement
+the filters (loop carried dependencies); they produce new vector
+elements every 5 and 8 cycles, respectively.
+
+Kernel {\tt cdp} is more complex with 4 multipliers in parallel
+followed by two adders. Despite the deeper pipeline, the processing
+speedup is not better than for the {\tt vec\_add}
+kernel. Unfortunately, the adders can not do an accumulation per cycle
+and need an external feedback loop which causes a new vector element
+result is accumulated every other cycle. Adding an accumulator mode to
+the ALUs is straightforward and will be considered in the future in
+order to double the processing speedup.
+
+The {\tt fft} kernel is the most complex kernel and goes through 43
+Versat configurations generated on the fly by the Versat
+controller. The processing time is 12115 cycles and the remaining 4590
+cycles is for data transfer and control. Note that most of the control
+is done while either the DMA or the data engine is running, and the
+controller runs alone for only 566 cycles. The processing time is
+almost 20x smaller compared to Microblaze. Thus, a slower acceleration
+in data movement brings the overall speedup down to about 16x.
+
+
+\subsection{Comparing with ARM}
+
+A prototype has been built using a Xilinx Zynq 7010 FPGA, which
+features a dual-core embedded ARM Cortex A9 system. Versat is
+connected as a peripheral of the ARM cores using its AXI4 slave
+interface. The ARM core and Versat are connected to an on-chip memory
+controller using their AXI master interfaces. The memory controller is
+connected to an off-chip DDR module.
+
+The execution results using an ARM Cortex A9 core for comparison are
+given in Table~\ref{tabExecR2}. In column {\it ARM}, the clock cycle
+counts is given, including the time to move the data between external
+DDR and the data cache. The total cycle counts for Versat are given in
+the {\it Versat} column, including the time to move the data between
+the Versat memories and the DDR. Column {\it Speedup} column gives the
+measured speedup and the {\it Energy Ratio} column compares the energy
+spent by an ARM system to the energy spent by ARM+Versat system. The
+speedup and energy ratio have been obtained assuming the ARM is
+running at 800 MHz and Versat is running at 600MHz in the 40nm
+technology. The energy ratio is the ratio between the energy spent by
+the ARM processor alone and the energy spent by an ARM+Versat combined
+system using the power figures in Table~\ref{tabASICr}.
+
+\begin{table}[!htb]
+  \renewcommand{\arraystretch}{1.2} % more space between rows
+  \caption{Execution results using ARM for comparison}
+  \label{tabExecR2}
+  \centering
+  \begin{tabular}{lcccc}
+    \toprule
+    Kernel & ARM & Versat & Speedup & Energy Ratio\\
+    \midrule
+    {\tt vec\_add} &  14726 &  4517 &  2.45 &  2.29\\
+    {\tt lpf1}     &  18890 &  7487 &  1.89 &  1.77\\
+    {\tt lpf2}     &  24488 & 10567 &  1.74 &  1.62\\
+    {\tt cdp}      &  25024 &  6673 &  2.81 &  2.63\\
+    {\tt fft}      & 394334 & 16705 & 17.70 & 16.55\\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Surprisingly, despite all its advanced features, the ARM system does
+not do much better compared to the Microblaze results in
+Table~\ref{tabExecR}. In fact for the {\tt fft} kernel Microblaze
+slightly outperforms the ARM system. If this result can be
+generalized, it suggests that simpler processor architectures combined
+with accelerators like Versat would yield even better silicon area and
+power results. Note that, if implemented in silicon with roughly the
+same amount of embedded RAM, a Microblaze core would be similar in
+size to a Versat core if not smaller.
+
+The ARM processor has much more hardware than Microblaze. ARM can
+fetch two instructions in paralell and dispatch four instructions in
+parallel. It has two pipelined multipliers, while Microblaze has only
+one. The reason why it underperforms the MicroBlaze in the {\tt fft}
+kernel, can be explained by a number of factors: one factor may be the
+memory hierarchy, which in the ARM case is composed by two cache
+levels instead of one level in the Microblaze case; Microblaze runs
+the instructions from the local memory (with 1 clock cycle latency),
+while the ARM uses its on-chip memory which is in parallel with the
+level 2 cache and still has to go through level 1 cache; finally,
+there may be compiler differences that result in two different machine
+codes.
+
+
+\subsection{Comparing with other CGRAs}
+
+Comparing Versat with Morphosys is possible since it is reported
+in~\cite{Kamalizad03} that the processing time for a 1024-point FFT is
+2613 cycles. Compared with the 12115 cycles taken by Versat this means
+that Morphosys was 4.6x faster. This is not surprising since Morphosys
+has 64 FUs compared to 11 FUs in Versat. However, our point is whether
+an increased area and power consumption is justified when the CGRA is
+integrated in a real system. Note that, if scaled to the same
+technology, Morphosys would be 5x the size of Versat. Unfortunately,
+comparisons with the ADRES architecture have not been possible, since
+we have not found any cycle counts published, despite ADRES being one
+of the most published CGRA architectures.
+
+

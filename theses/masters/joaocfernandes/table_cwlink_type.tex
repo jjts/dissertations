@@ -1,0 +1,67 @@
+\begin{table}[h]
+\centering
+\caption{CWDP Packet Types}
+\label{table:CWDP-Types}
+\begin{tabular}{c c c}
+\hlinew{0.08cm}
+\cellformatrG{}&
+\cellformatlrG{}&
+\cellformatlG{}
+\\
+\cellformatrG{\multirow{-2}{2cm}{\centering Value}} &
+\cellformatlrG{\multirow{-2}{2cm}{\centering Identifier}} &
+\cellformatlG{\multirow{-2}{2cm}{\centering Description}}
+\\
+\hlinew{0.04cm}
+\cellformatrW{ x"01" }& 
+\cellformatlrW{ CORE\_DATA }&
+\cellformatlW{Datagram Composed by data words for the cores}
+\\
+\hlinew{0.04cm}
+\cellformatrW{ x"02" }& 
+\cellformatlrW{ ACK }&
+\cellformatlW{ Acknowledge packet }
+\\
+\hlinew{0.04cm}
+\cellformatrW{ x"03" }& 
+\cellformatlrW{ SET\_CORE\_ACCESS }&
+\cellformatlW{ Resets packet counters and sets the controlling IP address}
+\\
+\hlinew{0.04cm}
+\cellformatrW{ x"04" }& 
+\cellformatlrW{ SET\_MAC }&
+\cellformatlW{}
+\\
+\hlinew{0.04cm}
+\cellformatrW{ x"05" }& 
+\cellformatlrW{MAC\_CFG}&
+\cellformatlW{       }
+\\
+\hlinew{0.04cm}
+\cellformatrW{ x"06" }& 
+\cellformatlrW{ NET\_CFG }&
+\cellformatlW{       }
+\\
+\hlinew{0.04cm}
+\cellformatrW{ x"07" }& 
+\cellformatlrW{ RT\_CFG }&
+\cellformatlW{       }
+\\
+\hlinew{0.04cm}
+\cellformatrW{ x"08" }& 
+\cellformatlrW{ RESET\_ADDRESS }&
+\cellformatlW{       }
+\\
+\hlinew{0.04cm}
+\cellformatrW{ x"09" }& 
+\cellformatlrW{ PING }&
+\cellformatlW{       }
+\\
+\hlinew{0.04cm}
+\cellformatrW{ x"0A" }& 
+\cellformatlrW{CORE\_COMMAND}&
+\cellformatlW{       }
+\\
+\multicolumn{3}{c}{\vspace*{-0.3cm}}\\
+\end{tabular}
+\end{table}

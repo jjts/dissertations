@@ -1,0 +1,5 @@
+{ "signal" : [
+{ name: "TX", wave: "1000110010011" , "period":2},
+{ name: "significado", "period":2 ,wave: "=============",data: ["espera", "inicio",  "dados0",  "dados1",  "dados2",  "dados3",  "dados4",  "dados5",  "dados6",  "dados7",  "paridade",  "paragem",  "espera"] }
+
+]}

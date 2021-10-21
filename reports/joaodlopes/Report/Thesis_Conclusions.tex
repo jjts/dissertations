@@ -1,0 +1,95 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                      %
+%     File: Thesis_Conclusions.tex                                     %
+%     Tex Master: Thesis.tex                                           %
+%                                                                      %
+%     Author: João D. Lopes                                            %
+%     Last modified :  2 June 2016                                     %
+%                                                                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Conclusions}
+\label{chapter:conclusions}
+
+In this report we have introduced a new CGRA architecture named Versat
+and we have compared it with some existing CGRAs architectures. The
+main difference is that Versat can take care of the reconfiguration
+process itself as well as the data movement operations to and from an
+external memory. For that, runtime partial reconfigurations triggered
+by an internal controller are used. This allows Versat to accelerate
+complex kernels such as FFTs without using too much hardware.
+
+Versat is a minimal CGRA with 4 embedded memories, 11 FUs and a
+basic 16-instruction controller. Compared with other CGRAs with larger
+arrays, Versat requires more configurations per kernel and a more
+sophisticated reconfiguration mechanism. Thus, the Versat controller
+can generate configurations and uses partial reconfiguration whenever
+possible. The controller is also in charge of data transfers and basic
+algorithmic flows.
+
+
+%Insert your chapter material here...
+
+
+% ----------------------------------------------------------------------
+\section{Achievements}
+\label{section:achievements}
+
+In this first version of Versat, the results show that the speedup
+improves with the kernel complexity. The kernel complexity depends on
+the number of datapaths that can be run sequentially using the data
+already in the Versat memories. In fact, our results show that single
+datapath kernels achieve speedups in the order of 2x while multiple
+datapath kernels can achieve speedups an order of magnitude higher.
+
+Unlike other CGRAs, which are designed to accelerate one program loop,
+Versat is designed to accelerate a sequence of chained program loops,
+where the results produced in one loop are consumed by the next loop. It
+has been explained that most of the times the next configuration can
+be generated while the DMA or the current configuration is running on
+the data engine. Because the Versat controller can generate
+configurations, these do not need to be stored in external memory and
+then moved into Versat. In general, the code to generate
+configurations is much smaller than the configurations themselves.
+
+Versat has been implemented in FPGA and in ASIC technology.  In terms
+of silicon area, Versat is comparable to a basic low range CPU.
+Results on a VLSI implementation show that Versat is competitive in
+terms of silicon area, frequency of operation and power
+consumption. Performance results on running a 1024-point FFT show that
+a system combining a state-of-the-art embedded processor and the
+Versat core can be 17x faster and more energy efficient than the
+embedded processor alone. Overall performance depends of course on how
+often such kernels are used in a real system. However, knowledge of
+multimedia algorithms can reveal that between 40\% to 80\% of the
+execution time in a regular CPU can use an accelerator such as the one
+described here. This means that overall speedups of 2x to 5x can be
+expected in real systems.
+
+%The major achievements of the present work...
+
+
+% ----------------------------------------------------------------------
+\section{Future Work}
+\label{section:future}
+
+The work on Versat can be continued in many different fronts. First
+of all, more examples as compelling as the FFT example need to be
+implemented to better asses Versat's capabilities. In fact, complete
+applications using several such kernels should be developed.
+
+A compiler is already under development and needs to be constantly evolved. Software
+libraries for host processors to use Versat are also needed. For
+example, to run the FFT kernel, the host program would just call a
+function {\tt fft(int*x,int *X, int n)}, where $x$ is a pointer to the
+input vector, $X$ is a pointer to the result vector and $n$ is the
+size of the vectors.
+
+Finally, more work on the architecture is needed. One would like to
+support fast changes to Versat's data engine and that such changes are
+automatically reflected on the assembler and compiler tools. This
+would allow targeting new classes of applications in a short period of
+time. Another area is to incorporate floating-point units in the data
+engine. Other than that, many small hardware optimizations can be
+effected to improve the area and frequency of operation of certain
+blocks.

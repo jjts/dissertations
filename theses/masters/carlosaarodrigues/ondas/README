@@ -1,0 +1,3 @@
+comando para converter svg para pdf
+
+rsvg-convert -f pdf -o t.pdf t.svg

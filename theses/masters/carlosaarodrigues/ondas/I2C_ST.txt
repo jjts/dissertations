@@ -1,0 +1,4 @@
+{ "signal" : [
+  { "name": "SCL", "wave": "n.", "period":4},
+  { "name": "SDA", "wave": "..01.xxx", "phase" :0.5 },
+]}

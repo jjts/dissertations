@@ -1,0 +1,199 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                      %
+%     File: Thesis_Introduction.tex                                    %
+%     Tex Master: Thesis.tex                                           %
+%                                                                      %
+%     Author: João D. Lopes                                            %
+%     Last modified :  2 June 2016                                     %
+%                                                                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Introduction}
+\label{chapter:introduction}
+
+\section{Motivation}
+\label{section:motivation}
+
+With the expansion in the number of features, modern embedded systems
+are becoming more and more power hungry. Therefore it is crucial to
+minimize power consumption. The main reason for this low power demand
+is the short battery life of most devices used daily.
+
+Another problem is the device price. The smaller the circuit the
+cheaper it will be, and higher profit margins can be obtained from
+it. Therefore, if one can deliver the same functionality with a
+smaller and more power efficient device, one will have a more
+competitive product.
+
+These problems have been tackled with smaller and smaller transistors
+which can work at higher frequencies without changing the
+architecture. However, with the eminent demise of Moore's law and the
+advent of the Internet of Things (IoT), this solution is not
+viable. Reconfigurable hardware, which is known to be extremely
+efficient in terms of power consumption and silicon area utilization,
+has been used in mid-range to high-end applications. Fine grain
+reconfigurable fabrics such as Field-Programmable Gate Arrays (FPGAs)
+can be an alternative but, compared to Coarse-Grain Reconfigurable Arrays
+(CGRAs), embedded FPGA cores consume significantly more silicon area and
+power.
+
+A CGRA is a collection of programmable functional units and embedded
+memories connected by programmable interconnects. This structure is
+what is called the reconfigurable array. When given a set of
+configuration bits, the reconfigurable array forms a hardware datapath
+able to execute a certain task orders of magnitude faster than a
+conventional Central Processing Unit (CPU). CGRAs are used as hardware
+co-processors to accelerate algorithms that are time/power consuming in
+regular CPUs.
+
+Normally, the reconfigurable array is used only to accelerate program
+loops and the non-loop code is run on an attached processor which has
+a conventional architecture. For this reason, CGRAs normally include a
+conventional processor. For example, the Morphosys
+architecture~\cite{Lee00} integrates a small Reduced Instruction Set
+Computer (RISC) and the ADRES architecture~\cite{Mei05} integrates a
+Very Large Instruction Word (VLIW) processor.
+
+
+\section{Problems addressed}
+\label{section:problemsAddressed}
+
+The main problems that we have identified with existing CGRAs are
+their large size, limited reconfiguration control and difficulty
+in programming. Therefore, we propose some architectural improvements
+to address these problems which follow three basic ideas.
+
+The first idea is to make the CGRA smaller and to use fully connected
+graph topology. Normally, graphs with constrained connectivity are
+employed in CGRAs to avoid decreasing the frequency of
+operation. However, low power devices will rarely choose to operate at
+a high frequency, so using a fully connected graph becomes a
+possibility. In terms of silicon area, fewer compute nodes can be used
+if all nodes are connected to one another but more routing resources
+are needed. Fortunately, these routing resources do not increase power
+consumption as our reconfiguration frequency is low. In fact, our
+reconfiguration process is more frequent compared to static arrays
+such as~\cite{Hartenstein99}, but much less frequent compared to
+dynamic arrays such as~\cite{Mei05}. Although we cannot build large
+datapaths with many functional units, because we use fewer, we can
+build {\it any} datapath with the functional units we do have.
+Finally, programming is drastically simplified as there is no need for
+{\em place \& route} algorithms in the compilation flow such as in
+FPGAs and other fabrics.
+
+The second idea is to make the configuration register addressable to
+the word level. The configuration is divided in spaces, which
+correspond to each functional unit, and the configuration spaces are
+further divided in configuration fields which are made individually
+addressable. Partial reconfiguration is useful to keep reconfiguration
+to a minimum, exploiting the similarity between successive
+configurations. Reducing reconfiguration time has a dramatic influence
+on improving the performance, which can compensate for a lower
+frequency of operation.
+
+The third idea is to integrate a specialized and programmable
+controller in the CGRA to manage reconfigurations and data transfers
+to/from external memory. The controller is in charge of the main
+program flow of the accelerator, sequencing the configurations and
+using partial reconfiguration whenever possible. The controller can
+spawn data stream compute threads in the CGRA and data movement
+threads using a Direct Memory Access (DMA) unit. While these threads are
+running, the controller can prepare the next configurations.
+
+
+\begin{comment}
+
+Normally, the reconfigurable array is used only to accelerate program
+loops and the non-loop code is run on an attached processor which has
+a conventional architecture. For this reason, CGRAs normally include a
+conventional processor. For example, the Morphosys
+architecture~\cite{Lee00} integrates a small Reduced Instruction Set
+Computer (RISC) and the ADRES architecture~\cite{Mei05} integrates a
+Very Large Instruction Word (VLIW) processor.
+
+\end{comment}
+
+%Relevance of the subject...
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Topic Overview}
+\label{section:overview}
+
+In this work we presente Versat, a new reconfigurable hardware
+accelerator which is suitable for low-cost low-power devices. Its
+architecture uses a relatively small number of functional units and a
+simple controller. A smaller array limits the size of the data
+expressions that can be mapped to the CGRA but large expressions can
+be broken into smaller expressions which can be executed sequentially
+in the CGRA. Therefore, Versat requires mechanisms for handling large
+numbers of configurations and frequent reconfigurations efficiently.
+
+Versat is to be used as a co-processor featuring an Application Programming
+Interface (API) containing a set of useful kernels. Applications developers
+can use a commercial embedded processor with a rich ecosystem and drop in a
+Versat core for performance and power optimization. Versat programmers can
+create a set of useful kernels that application programmers will want to
+use. In this way, the software and programming tools of the CGRA are
+clearly separated from those of the application processor. This makes
+Versat suitable for supporting the Open Computing Language (OpenCL)
+standard or others.
+
+%Provide an overview of the topic to be studied...
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Objectives}
+\label{section:objectives}
+
+The main objective of this new architecture is to get acceleration
+with low power consumption and small silicon area.
+
+In fact, Versat can replace a number of dedicated hardware
+accelerators in a System on Chip (SoC), making it smaller, more power
+efficient and safer to design (the development risk of designing
+dedicated hardware accelerators is eliminated).
+
+Digital signal processing applications are targeted: biometrics,
+speech recognition, artificial vision, security, etc. The overall goal
+of the project is to create an Intellectual Property (IP) core and a
+library of useful procedures. A clean procedural interface to a host
+becomes possible. With such an interface the host can have tasks
+executed in the CGRA by simply calling procedures and passing
+arguments.
+
+%Explicitly state the objectives set to be achieved with this thesis...
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Author's Work}
+\label{section:authorWork}
+
+%falar no trabalho feito por outros; trabalho feito pelo autor
+The work presented here is the result of the work of a few
+people. When I started working on this project, in the summer of 2014,
+there was a preliminary, non-functional version of the system.  I
+contributed the multi-threading idea, where the state machines of the
+address generators work independently, I pipelined parts of the
+implementation to improve the frequency of operation, I wrote the boot
+Read Only Memory (ROM) software and its hand shaking protocol with a
+host system. I also implemented the DMA design, master and slave
+Advanced Extensible Interface (AXI) interfaces, contributed to the
+Application-Specific Integrated Circuit (ASIC) implementation, and,
+finally, I wrote all assembly kernels used for tests and implemented a
+regression test system where it is easy to add or remove new tests. As
+a result of this work, the team has already a paper accepted for
+publication~\cite{deSousa16}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Report Outline}
+\label{section:outline}
+
+This report is composed by a few more chapters. In the second chapter,
+the advantages and disadvantages of other architectures are
+discussed. In the third chapter, Versat's architecture is fully
+described. In the fourth chapter, some experimental results are
+presented. In the fifth and final chapter, our achievements are
+pointed out and some future work is outlined.
+
+%Briefly explain the contents of the different chapters...
+

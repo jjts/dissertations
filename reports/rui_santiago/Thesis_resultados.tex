@@ -1,0 +1,116 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                      %
+%     File: Thesis_Introduction.tex                                    %
+%     Tex Master: Thesis.tex                                           %
+%                                                                      %
+%     Author: Rui Santiago                         			   %
+%     Last modified : 4 Junho 2015                      		   %
+%                                                                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\chapter{Resultados}
+\label{chapter:Resultados}
+
+\textcolor{red}{ falar com o professor para dividir os resultados em vários capítulos}
+
+\section{Flex/bison}
+\label{section:Flex/bison}
+
+\textcolor{red}{Tirado da wikipedia}
+
+O Flex é um gerador lexical. Ele normalmente é usado em conjunto com o gerador de {\it parse} Bison. Ao contrário do Bison, o Flex não faz parte do projecto GNU.
+O analisador lexical Flex tem complexidade temporal O(n) em relação ao tamanho da entrada. Isso significa que que faz um número constante de operações por cada simbolo de entrada. 
+
+O Bison é um gerador de {\it parse} que faz parte do projecto GNU. O Bison lê a especificação de uma linguagem criada pelo utilizador, verifica a existência de alguma ambiguidade e gera o {\it parse} em C, que lê sequências de {\it tokens} e decide se a sequência obedece à gramática definida.
+
+
+\subsection{Linguagem definida}
+\label{section:Linguagem definida}
+
+Definiu-se a linguagem do compilador. Decidiu-se que o melhor era construir uma linguagem baseada em C++. 
+Visto que o Versat não tem uma {\it stack} própria, é impossível criar funções em C++ do Versat. Para organizar o código em pseudo-rotinas é necessário usar a instrução {\it goto}.
+As instruções relativas às Alu e às AluLite estão definidas na tabela~\ref{tab:instrAlu}. 
+
+
+\begin{table}[!htbp]
+  \begin{center}
+   \caption{Instruções em C do Versat para a Alu e a AluLite.}
+  \centering
+    \begin{tabular}{|p{1.5cm}|p{1cm}|p{5cm}|p{5cm}|}
+    \hline 
+    
+    {\bf Unidade} & {\bf Nº da unidade} & {\bf Método} & {\bf Descrição} \\
+  %  \hline \hline 
+  %   alu & 0-1 & setOper(oper) & Define um operador para a Alu seleccionada \\
+  %  \hline
+   %  aluLite & 0-3 & setOper(oper) & Define um operador para a AluLite seleccionada \\
+  %  \hline
+  %   alu & 0-1 & connectPortA(FU) & Connecta o porto A da alu à saída da unidade funcional passada como argumento \\
+  %  \hline
+   %  aluLite & 0-3 & connectPortA(FU) & Connecta o porto A da aluLite à saída da unidade funcional passada como argumento \\
+    \hline
+    \end{tabular}
+  \label{tab:de_ctr_reg}
+  \end{center}
+\end{table}
+
+
+\begin{table}[h!]
+  \begin{center}
+    \begin{tabular}{|C{1.5cm}|c|c|C{7cm}|}
+      \hline
+       {\bf Unidade} & {\bf Nº da unidade} & {\bf Método} & {\bf Descrição} \\
+      \hline \hline
+     % \multirow{10}{*}{Wishbone} & wb\_clk\_i & input & Clock, Recebido pelo Wishbone. \\
+      \cline{1-4}
+      alu & 0-1 & setOper(oper) & Define um operador para a Alu seleccionada. \\
+      \cline{1-4}
+       aluLite & 0-3 & setOper(oper) & Define um operador para a AluLite seleccionada. \\
+      \cline{1-4}
+      alu & 0-1 & connectPortA(FU) & Connecta o porto A da alu à saída da unidade funcional passada como argumento. \\
+      \cline{1-4}
+       aluLite & 0-3 & connectPortA(FU) & Connecta o porto A da aluLite à saída da unidade funcional passada como argumento. \\
+      \cline{1-4}
+      alu & 0-1 & connectPortB(FU) & Connecta o porto B da alu à saída da unidade funcional passada como argumento. \\
+      \cline{1-4}
+       aluLite & 0-3 & connectPortB(FU) & Connecta o porto B da aluLite à saída da unidade funcional passada como argumento. \\
+       \cline{1-4}
+       alu & 0-1 & connectPortA(mem,port) & Connecta o porto A da alu à saída da memória passada como argumento. Quando se faz conecções a memórias, é necessário indicar o porto ao qual se quer conectar. \\
+      \cline{1-4}
+       aluLite & 0-3 & connectPortA(mem,port) & Connecta o porto A da aluLite à saída da memória passada como argumento. Quando se faz conecções a memórias, é necessário indicar o porto ao qual se quer conectar. \\
+      \cline{1-4}
+      alu & 0-1 & connectPortB(mem,port) & Connecta o porto B da alu à saída da memória passada como argumento. Quando se faz conecções a memórias, é necessário indicar o porto ao qual se quer conectar. \\
+      \cline{1-4}
+       aluLite & 0-3 & connectPortB(mem,port) & Connecta o porto B da aluLite à saída da memória passada como argumento. Quando se faz conecções a memórias, é necessário indicar o porto ao qual se quer conectar. \\
+     
+      \hline
+    \end{tabular}
+  \end{center}
+  \caption[Instruções respectivas à Alu e à AluLite.]{Instruções respectivas à Alu e à AluLite.}
+  \label{tab:instrAlu}
+\end{table}
+
+
+
+
+
+
+
+\subsection{Instruções do Data Engine}
+\label{section:Instrucoes do Data Engine}
+
+\subsection{Instruções do controlador}
+\label{section:Instrucoes do controlador}
+
+
+\section{Geração de assembly}
+\label{section:Geracao de assembly}
+
+\section{Teste e eficiência do compilador}
+\label{section:Teste e eficiencia do compilador}
+
+
+
+
+\cleardoublepage

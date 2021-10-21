@@ -1,0 +1,218 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                      %
+%     File: Thesis_Introduction.tex                                    %
+%     Tex Master: Thesis.tex                                           %
+%                                                                      %
+%     Author: João D. Lopes                                            %
+%     Last modified :  30 September 2017                               %
+%                                                                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Introduction}
+\label{chapter:introduction}
+
+\section{Motivation}
+\label{section:motivation}
+
+Cloud Computing is a fashionable but well known topic, which has been
+studied since at least 1971~\cite{white1971network}. However, it can
+be argued that it is better to have distributed computing, storage and
+networking resources than to concentrate everything in a single
+node~\cite{armbrust2010view}.
+
+Edge computing is the logic response to cloud computing; the data is
+processed on the edge of the network, near its
+source~\cite{gaber2014pocket}. This considerably reduces the bandwidth
+needed to transfer the data between the nodes and the data
+center. Edge Computing can benefit many applications and devices. In
+particular it is extremely useful in Wireless Sensor Networks
+(WSNs)~\cite{beckman2016waggle}.
+
+A crucial problem of deploying computational resources on WSN nodes is
+power consumption. WSN nodes are normally battery operated and very
+price sensitive. Therefore, if one can deliver the same functionality
+with a smaller and more power efficient device, a more competitive
+product will be released.
+
+Since WSN nodes are extremely constrained in terms of energy
+efficiency and price, they often employ inexpensive and low
+performance embedded processors. To attend the computational demands
+of certain applications, it is common to place dedicated hardware
+accelerators in the chip, used by these applications. However, the
+fact that these hardware blocks are not programmable increases the
+risk of design errors and prevents future updates. Ideally a
+programmable accelerator should be employed such as a Graphics
+Processing Unit (GPU) or a Field Programmable Gate Array
+(FPGA). However, these accelerators are much larger than the embedded
+processor cannot viably be used.
+
+A more suitable accelerator is the Coarse Grained Reconfigurable Array
+(CGRA), as it can be made small and energy efficient. A CGRA is a
+collection of programmable Functional Units (FUs) and embedded memories
+connected by programmable interconnects. This structure is called the
+Reconfigurable Array. When programmed with a stream of configuration
+bits, the reconfigurable array forms hardware datapaths able to
+execute certain tasks orders of magnitude faster than a conventional
+Central Processing Unit (CPU). CGRAs are used as hardware
+co-processors to accelerate algorithms that are time/power consuming
+in regular CPUs.
+
+Normally, the reconfigurable array is used only to accelerate program
+loops and the non-loop code is run on a CPU. For this reason, CGRAs
+normally include a conventional processor. For example, the Morphosys
+architecture~\cite{Lee00} integrates a small Reduced Instruction Set
+Computer (RISC) and the ADRES architecture~\cite{Mei05} integrates a
+Very Large Instruction Word (VLIW) processor.
+
+Despite being an obvious solution, in practice CGRAs have not been
+widely adopted in the industry. The main problems that were identified
+with existing the CGRAs and that motivated this work are the
+following: they are not made small enough, they have limited
+reconfiguration control and are difficult to program. Therefore, we
+propose some architectural improvements to address these problems
+which follow three basic ideas.
+
+\section{Solutions}
+
+The first idea is to use a low number of FUs which form a fully
+connected graph topology~\cite{vecparBook16}. This simultaneously
+tackles the size and programmability problems (programmability
+increases with connectivity). Normally, graphs with constrained
+connectivity are employed in CGRAs to allow spatial compactness and a
+high frequency of operation. However, with a low number of FUs the
+full mesh topology becomes affordable. Integrated Circuit (IC)
+implementation results indicate that only $4.04\%$ of the core area is
+occupied by the full mesh interconnect. Plus, a low power device will
+rarely choose to operate at a very high frequency, so the moderate
+frequencies achieved by the IC implementation should cover a vast
+range of applications.  The reconfiguration process is {\em
+  quasi-static}, i.e., it is more frequently reconfigured compared to
+static arrays such as~\cite{Hartenstein99}, but much less frequently
+compared to dynamic arrays such as~\cite{Mei05}. Although large
+datapaths cannot be build with few FUs, it is necessary to break large
+datapaths into several smaller ones. On the other hand, {\em any}
+datapath that does not require more FUs than existing can be build due
+to the full connectivity of the nodes. Finally, programming is
+drastically simplified as there is no need for {\em place \& route}
+algorithms in compilation flow such as in FPGAs and other
+fabrics. Another interesting feature is the fact that a full mesh is
+such an easy to apprehend structure that assembly programming is
+enabled, which is invaluable for optimizations and compiler or
+hardware bug workarounds.
+
+The second idea is to make the configuration register addressable at
+the word level and therefore enable fine partial
+reconfiguration~\cite{vecparBook16}. The CGRA configuration is divided
+in spaces which correspond FUs. The configuration spaces are further
+divided in configuration fields which are individually
+addressable. Partial reconfiguration is useful to reduce the
+reconfiguration time to a minimum, sometimes exploiting the similarity
+between successive configurations. Reducing reconfiguration time has a
+dramatic influence on improving the performance, which can compensate
+a lower frequency of operation.
+
+The third idea is to integrate a small programmable controller in the
+CGRA to manage reconfigurations and data transfers to/from external
+memory~\cite{jcer16}. The controller is in charge of the main program
+flow of the accelerator, sequencing the configurations and using
+partial reconfiguration whenever possible. The controller can spawn
+data stream compute threads in the CGRA and data movement threads
+using a Direct Memory Access (DMA) unit. While these threads are
+running, the controller can prepare the next configurations.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Topic Overview}
+\label{section:overview}
+
+In this work we present Versat, a new reconfigurable hardware
+accelerator which is suitable for low cost and low power devices. Its
+architecture uses a small number of functional units and a simple
+controller. A smaller array limits the size of the data expressions
+that can be mapped to the CGRA, forcing large expressions to be broken
+into smaller ones which can be executed sequentially in the
+CGRA. Therefore, Versat requires mechanisms for handling large numbers
+of configurations and frequent reconfiguration.
+
+Versat is meant to be used as a co-processor used by means of an
+Application Programming Interface (API) containing a set of useful
+kernels. Full application developers can use a commercial embedded
+processor to benefit from its rich ecosystem and drop in a Versat core
+for performance and power optimization. Versat programmers can create
+a set of kernels for application programmers use. In this way, the
+software and programming tools of the CGRA are clearly separated from
+those of the application processor.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Objectives}
+\label{section:objectives}
+
+The main objective driving the development of the Versat architecture
+is to obtain useful acceleration at low power consumption and small
+silicon area. In fact, Versat can replace a number of dedicated
+hardware accelerators in a System on Chip (SoC), consisting in a
+smaller, more power efficient and safer to design system, as a
+programmable solution eliminates the development risk of designing
+dedicated hardware accelerators.
+
+Digital signal processing applications are targeted for biometrics,
+speech recognition, artificial vision, security, etc. The overall goal
+of the project is to create an Intellectual Property (IP) core and a
+library of useful procedures. A clean procedural interface to a host
+processor or driver is also an objective. With such an interface hosts
+can have tasks executed in the CGRA by simply calling procedures and
+passing arguments.
+
+To illustrate the applicability of the Versat core, two popular
+algorithms for embedded applications have been implemented: the Fast
+Fourier Transform (FFT)~\cite{jcer17} and the K-Means Clustering
+algorithm~\cite{fpl17}. The FFT is a central digital signal processing
+algorithm, used in many applications. The importance of the K-Means
+Clustering algorithm has been increasing with the demand for efficient
+classification of large datasets of multiple dimensions and clusters.
+
+These two algorithms have been accelerated using Graphics Processor
+Units (GPUs)~\cite{moreland2003fft,doggettfft,Che07,farivar2008} and
+using Field Programmable Gate Arrays
+(FPGAs)~\cite{chao2005design,sun2008design,derafshi2010high,Liu2005,hussain2011,kutty2013}. Although
+these implementations have been shown to improve performance and
+energy consumption over General Purpose Processors (GPPs)
+implementations, they can hardly be used in ultra low energy scenarios
+such as WSNs. A few works have demonstrated that it is more efficient
+in terms of time and energy to run the FFT and K-Means Clustering
+algorithms in a distributed
+fashion~\cite{canli2006power,Sasikumar2012,xu2012power}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Author's Work}
+\label{section:authorWork}
+
+The work here presented is the result of a few people's work. When I
+started working on this project, in the summer of 2014, there was a
+preliminary, non-functional version of the system. I contributed with
+many ideas: independent Address Generation Units (AGUs), which enabled
+multi-threading in the Versat reconfigurable array; improvement of the
+operation frequency by applying pipelining techniques; the boot loader
+Read Only Memory (ROM) software and its handshaking protocol with a
+host system. I also implemented the DMA, master and slave Advanced
+Extensible Interface (AXI) interfaces, contributed to the
+Application-Specific Integrated Circuit (ASIC) implementation, I wrote
+all assembly kernels used for tests and implemented a regression test
+system where it is easy to add or remove tests. As a result of this
+work, the following papers have been
+published:~\cite{deSousa16,vecparBook16,jcer16,rec17,fpl17,jcer17}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Thesis Outline}
+\label{section:outline}
+
+This thesis is composed of 6 more chapters. In the second chapter, the
+advantages and disadvantages of other architectures are discussed. In
+the third chapter, the Versat architecture is fully described. In the
+fourth chapter, it is described how to program Versat. In the fifth
+chapter, two algorithms common in real applications are fully
+studied. In the sixth chapter, experimental results are presented. In
+the seventh and final chapter, our achievements are pointed out and
+directions for future work are outlined.
+

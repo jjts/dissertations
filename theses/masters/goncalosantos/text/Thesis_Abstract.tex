@@ -1,0 +1,56 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                      %
+%     File: Thesis_Abstract.tex                                        %
+%     Tex Master: Thesis.tex                                           %
+%                                                                      %
+%     Author: Gonçalo Santos                                           %
+%     Last modified : 20 Oct 2018                                      %
+%                                                                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Abstract}
+
+% Add entry in the table of contents as section
+\addcontentsline{toc}{section}{Abstract}
+
+%Insert your abstract here with a maximum of 250 words, followed by 4 to 6 keywords...
+
+% Versat is CGRA so supports partial reconfiguration
+% picoVersat is the reconfigurator and performs auxiliary tasks
+% C-language compiler instead of specific picoVersat assembler
+% lcc back-end: instr-selection, register assignment, code emiting, asm-support
+% Versat FU control through regular C-language structures and constructs.
+
+Reconfigurable computing has had a great focus in the past decades as it
+promises to combine the performance of dedicated hardware with the flexibility
+of software.  {\it Versat} is a Coarse Grained Reconfigurable Array architecture
+capable of dynamic and partial reconfiguration. The purpose of this work is to
+provide a full {\bf C} language compiler for {\it picoVersat}, the {\it Versat}
+hardware controller. {\it PicoVersat} has a minimalist instruction
+set, can be programmed in its assembly, and is used to perform simple
+calculations and reconfiguring Versat. % 81
+
+The {\bf lcc} framework was chosen because it is a retargetable compiler, well
+documented and uses a code selection tool to help the code generation
+process. Each {\bf lcc} {\it back-end} is configured through a structure that
+parameterizes the {\it back-end} code generator.  Instruction selection
+optimization is achieved by providing different tree grammar combination of
+different costs. Complex instructions can be coded manually as well as function
+activation records. Assembly in-lining through the {\tt asm} routine was added
+to the compiler {\it front-end}, since it is not {\sc ANSI} {\bf C}. % 83
+The {\it Versat} configuration is memory mapped, thus each functional unit
+can be configured by writing to specific memory addresses with an ordinary
+{\bf C} language assignment instruction. The compiler was integrated
+into a compilation framework, and extensive testing was performed. % 39
+
+The resulting compiler allows all benefits of the {\bf C} high-level language.
+Low level assembly instructions are still possible through the {\tt asm} directive.
+The minimalist {\it picoVersat} instruction set results in long code sequencies,
+specially for stack operations like argument or function manipulation. % 41
+
+\vfill
+
+\textbf{\Large Keywords:} Versat, CGRA, picoVersat, C-compiler, lcc {\it back-end}.
+
+\cleardoublepage
+

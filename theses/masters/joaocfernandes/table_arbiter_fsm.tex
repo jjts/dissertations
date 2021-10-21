@@ -1,0 +1,38 @@
+\begin{table}[h]
+\centering
+\caption{Arbiter FSM States}
+\label{table:Arbiter-FSM}
+\begin{tabular}{c l}
+\hlinew{0.08cm}
+\cellformatrG{}&
+\cellformatlG{}
+\\
+\cellformatrG{\multirow{-2}{2cm}{\centering State}} &
+\cellformatlG{\multirow{-2}{2cm}{\centering Description}}
+\\
+\hlinew{0.04cm}
+\cellformatrW{ s\_stop }& 
+Initial state. \ac{FSM} waits for a TX request from one of the Cw-Link units.
+\\
+\hlinew{0.04cm}
+\cellformatrW{ s\_stop\_1 }& 
+\ac{FSM} waits for a TX request from one of the Cw-Link units.
+\\
+\hlinew{0.04cm}
+\cellformatrW{ s\_tx\_0 }& 
+Resources Granted to Cw-Link 0.
+\\
+\hlinew{0.04cm}
+\cellformatrW{ s\_tx\_1 }& 
+Resources Granted to Cw-Link 1.
+\\
+\hlinew{0.04cm}
+\cellformatrW{ s\_wait\_0 }& 
+Waiting for Cw-Link 0 to free the Resources.
+\\
+\hlinew{0.04cm}
+\cellformatrW{ s\_wait\_1 }& 
+Waiting for Cw-Link 1 to free the Resources.
+\\
+\end{tabular}
+\end{table}

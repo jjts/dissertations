@@ -1,0 +1,67 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                      %
+%     File: Thesis_Results.tex                                         %
+%     Tex Master: Thesis.tex                                           %
+%                                                                      %
+%     Author: Andre C. Marta                                           %
+%     Last modified :  2 Jul 2015                                      %
+%                                                                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Results}
+\label{chapter:results}
+
+\section{Toolchain installation}
+
+The toolchain installation was simple because the PicoRV32' GitHub
+repository~\cite{bib:picorv32} provides a Makefile script for that
+effect. Different make commands are available so that it is possible to install
+just the RV32I, RV32IC, RV32IM and RV32IMC ISAs. Some adjustments to the Linux
+shell commands were made in order for them to work in CentOS 7 (the operating
+system running in the host machine), such as using \textit{yum} instead of
+\textit{apt-get}, which is used in some Linux distributions such as Debian and
+Ubuntu but not in CentOS, which uses \textit{yum} for software package
+management\footnote{CentOS uses \textit{yum} because it is derived from the Red
+  Hat Enterprise Linux distribution.}.
+
+The provided testbenches were ran using simple make test commands (check the
+README file in ~\cite{bib:picorv32} for details) and the results were
+correct. As such, the RV32IMC toolchain was successfully installed in the host
+computer running the CentOS 7 distribution of Linux.
+
+\section{Synthesis of a simple PicoRV32 CPU + memory system}
+%successful FPGA deployment of simple CPU + memory system (quartus script)
+%tabela recursos
+%tempos
+%
+%...
+The simple CPU + memory system in folder scripts/quartus of the PicoRV32's
+GitHub repository was successfully synthesized in an Intel's Cyclone V GT
+FPGA device. The clock period used was 10 ns, which means the clock frequency was 100
+MHz. The README file states that the maximum clock frequency is between 250 MHz
+and 400 MHz on 7-Series Xilinx FPGAs.
+
+The PicoRV32 core used was a pure RV32I core. The FPGA's resource usage summary
+stated that this PicoRV32 core used:
+\begin{itemize}
+	\item 1103 combinational ALUTs;
+	\item 648 dedicated logic registers;
+	\item 2048 block memory bits.
+\end{itemize}
+
+The README file in the PicoRV32' GitHub repository states that a
+regular-sized\footnote{See the bottom of the README file in~\cite{bib:picorv32}
+  for the definition of small, regular and large-sized PicoRV32 core.} PicoRV32
+core (which is the type of core used in the system synthesized) for a Xilinx
+7-series Kintex device uses:
+
+\begin{itemize}
+	\item 917 slice LUTs;
+	\item 583 slice registers;
+	\item 48 LUTs as memory.
+\end{itemize}
+
+Although the comparison between Intel and Xilinx resources is not
+straightforward, these results show that the number of LUTs and registers is
+close enough, which validates the information provided in the repository. PicoRV32 is,
+indeed, a small RISC-V CPU core that can be used in a SoC.

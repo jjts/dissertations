@@ -1,0 +1,154 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                      %
+%     File: Thesis_Conclusions.tex                                     %
+%     Tex Master: Thesis.tex                                           %
+%                                                                      %
+%     Author: Andre C. Marta                                           %
+%     Last modified :  2 Jul 2015                                      %
+%                                                                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Conclusions}
+\label{chapter:conclusions}
+
+This document presents a research made to understand the state-of-the-art
+methods for developing SoCs using open source hardware and software components.
+
+First, a revision of the evolution of RISC ISAs and processors was made,
+comparing it to its CISC counterpart. The advantages of using open source RISC
+processors to build SoCs were highlighted and carefully explained. Then followed
+a description of the RISC-V ISA and some of its main advantages for SoC
+development. Next, a brief survey of SoC trends and features was made and the
+most pertinent ones were detailed.
+
+With this, four RISC-V processor cores were identified and their features were
+discussed in order to select which one would be chosen to start building the
+\socname System On Chip. In the end, the size-optimized PicoRV32 core was
+selected because it seems to provide the most adequate features to fulfill the
+goals in mind for this dissertation project. Afterwards, a description of the
+top-level design intended for the \socname System on Chip was made.
+
+The state-of-the-art methods for SoC verification using open source toolchains
+are described, as well as the usual development flow of the entire SoC
+development process and how the toolchain is used throughout it. The development
+environment to be made in this dissertation project is then introduced,
+emphasizing the use of an Ethernet interface with the roles usually played by a
+JTAG tap in this kind of systems: loading programs and sending bitstreams from
+the host computer to the SoC (which may reside in an FPGA), and
+remote debugging of programs running on these.
+
+Some preliminary results regarding PicoRV32's deployment on FPGA are shown and
+commented.
+
+
+% ----------------------------------------------------------------------
+\section{Achievements}
+\label{section:achievements}
+
+The research made so far has showed that the development of RISC-based systems
+is more alive than ever, and it will continue to grow in the upcoming IoT
+era. The RISC-V open ISA is a promising initiative; for example, startup SiFive
+Inc. has already released the world’s first RISC-V based 64-bit quad-core CPU
+to support fully featured operating systems like Linux.
+
+The main features of SoCs for IoT purposes have been identified and an early
+approach for the top-level design of the \socname System on Chip has been
+defined. A preliminary simplistic diagram for the Test program and software
+debug has been produced, although some details have yet to be reviewed and
+better analyzed. The previous iterations of the project at hand proved to be
+useful for understanding how a robust SoC development environment can be built
+using open source components, and will serve as an inspiration for the work to
+be carried out during the dissertation project.
+
+Some preliminary experiments have been made to assess the resources needed for
+FPGA implementation of the PicoRV32 core. The results show that the PicoRV32
+core is indeed small and that this CPU architecture is a good contender for the
+development of the \socname System on Chip.
+
+\section{Future Work}
+\label{section:future}
+
+\subsection{Dissertation Project}
+
+During the upcoming dissertation project, one of the first main focuses will be
+to understand how the PicoRV32 architecture is built and how it implements the
+RISC-V ISA. It is necessary to understand how peripheral components and
+interfaces such as the UART, SPI and Ethernet interface and the memory
+controller can be connected to the CPU's pins such that all components in the
+\socname System On Chip commuicate well with each other.
+
+Another important aspect that still needs some further study and research is the
+GNU RISC-V toolchain, because the are many details regarding it that are not
+still well understood, such as how can Newlib and the GCC and clang/LLVM
+cross-compilers be used to make the compilation aware of new hardware units,
+their clock frequencies, etc. Also, it will be necessary to study better how
+GBD's commands work in order to write the debug software to use with the new
+Ethernet communication infrastructure.
+
+The makefiles for implementing the development environment will need to be
+written as \socname is built, so to follow its progress. Fortunately, the
+makefiles provided in PicoRV32's GitHub repository for this matter seem to have
+been well structured and may prove useful for the development environment.
+
+The planning of the tasks for the dissertation project is presented in
+Table~\ref{table:planning}.
+\begin{table}[!htbp]
+	\centering
+	\caption{Planning of the dissertation project.}
+	\label{table:planning}
+	\begin{tabular}{p{11cm}c}
+		\toprule
+		\textbf{Work Planning}                                                                            & \textbf{Scheduling} \\
+		\midrule
+		Study PicoRV32 RISC-V documentation and PicoRV32's architecture and examples                      & 18/02 - 25/02       \\
+		\midrule
+		Build the \socname System on Chip writing Verilog code                                            & 26/02 - 26/03       \\
+		\midrule
+		Study PicoRV32's Makefiles and toolchain documentation                                            & 27/03 - 04/04       \\
+		\midrule
+		Write Makefiles to implement the verification environment                                         & 05/04 - 12/04       \\
+		\midrule
+		Create testbench to verify \socname and its components                                            & 13/04 - 20/04       \\
+		\midrule
+		Develop debug program                                                                             & 21/04 - 18/05       \\
+		\midrule
+		Verify \socname with RTL simulations                                                              & 19/05 - 26/05       \\
+		\midrule
+		Verify \socname with FPGA emulation                                                               & 26/05 - 07/06       \\
+		\midrule
+		Create/use existing software application and debug it                                             & 08/06 - 15/05       \\
+		\midrule
+		Write the dissertation report                                                                     & 16/06 - 01/07       \\
+		\bottomrule 
+	\end{tabular}
+\end{table}
+
+\subsection{Future perspectives}
+
+In case the \socname System on Chip is successfully built during the
+dissertation project, one of the next future projects will be to integrate in it
+one or several Versat~\cite{bib:versat} CGRA cores. This opens new
+reconfiguration capabilities for SoCs and development possibilities for IoT
+applications. CGRAs offer hardware reconfigurability like FPGAs but are less
+power hungry, because the infrastructure that connects the hardware blocks that
+make up the reconfigurable array in a CGRA is much smaller than in an FPGA. This
+is a consequence of CGRA's operation being done a the word level, while the
+FPGA's operation is made at the bit level.
+
+% RASCUNHO, IGNORAR
+%The Versat cores can be instantiated as peripheral or co-processor units in the \socname System on Chip, which bestows new configuration capabilities for SoC development. On the one hand, CGRAs are, in a sense, like FPGAs because both consist in reconfigurable arrays of several interconnected smaller hardware blocks whose connections can be configured to emulate a desired circuit (or part of it). On the other hand, CGRAs are much smaller and much less power hungry than FPGAs, because the infrastructure that connects the hardware blocks that make up the reconfigurable array in a CGRA is much smaller than in an FPGA. This is because a CGRA's operation is based on a byte (or sereval bytes) level, while the FPGA operates at the bit level.
+
+% RASCUNHO, IGNORAR
+%The hardware blocks that make up the reconfigurable array in a CGRA are components like ALUs, multipliers, MULADDs (i.e. a multiplier in series with an accumulator) and memories, which have inputs and outputs with one or more bytes in size. The FPGA's reconfigurable array, is composed of several Configurable Logic Blocks (CLBs), which in turn are composed of several slices, which in turn are composed of a set number of LUTs, flip-flops and multiplexers~\cite{bib:xilinx}. LUTs are of logic gates hard-wired on the FPGA that store the truth table of a desired logic function. Through them, one can implement logic functions with a precision of bits.
+
+Another interesting future work perspective is to convert the \socname System on
+Chip on a Network on Chip (NoC), i.e., replace the bus communication
+infrastructure and interfaces in the SoC by a network infrastructure based on
+Internet communication protocols such as TCP and IP and routing algorithms.
+Components will communicate with each other through routers attached to them
+inside the chip. It has already been demonstrated in academia (namely,
+in~\cite{bib:noc}) that NoC approaches confer great communication upgrades to
+SoCs with conventional bus-based infrastructures in nearly all relevant
+parameters such as static and dynamic power, area, throughput, latency and
+maximum frequency, which validates this future work perspective.
+

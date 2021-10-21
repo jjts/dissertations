@@ -1,0 +1,163 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                      %
+%     File: Thesis_Introduction.tex                                    %
+%     Tex Master: Thesis.tex                                           %
+%                                                                      %
+%     Author: Gonçalo Santos                                           %
+%     Last modified : 20 Oct 2018                                      %
+%                                                                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Introduction}
+\label{chapter:introducao}
+
+In the past decades there has been a great focus in reconfigurable computing.
+Due to the fact that these systems can change their architecture dynamically to
+be best suit to the task being executed, they can greatly accelerate the
+execution of applications mainly in the fields reigned by embedded systems, like
+telecommunications, multimedia, etc~\cite{Carta06,Liu15,Lee18TACO}.  Many of
+these embedded applications need to have low power consumption, and reduced
+silicon area while still having a high number of computations done per second.
+
+{\it Versat} is one of these architectures capable of changing component
+functions and interconnections dynamically~\cite{Lopes16}.  This system uses a
+Data Engine in order to execute code loops. {\it Versat}, like architectures of
+this type, is not designed to run efficiently when the code has a great amount
+of different instructions, but rather when the code revolves around loops and
+repeated instructions in general.  To do the more eclectic code there is a
+controller that also manages {\it Versat}, making it run and taking care of the
+reconfigurations.
+
+For an architecture like this there is not only the way the components operate
+themselves but also the coding and execution management of the system.  For the
+coding aspect of these systems the best solution would be to have a compiler for
+the system that allowed the effective use of the components while being able to
+be coded in a language easily understood by humans~\cite{Koeplinger18PLDI}.
+Unfortunately there is not still an universal, or even close to universal,
+compiler for these types of architectures. Even so, a compiler for this
+architecture was made~\cite{Santiago2016} but it still has some flaws that need
+to be resolved.
+
+So, the point of this work is to replace the existing {\it Versat} compiler
+solving the issues that the previous one still has. For this, some different options
+will be discussed, keeping in mind that this is not a traditional CPU
+architecture. This means that there is need to study compilers in general as
+well as the architecture in question.
+
+%Arquitectures often consist of tens to hundreds of FUs that are capable of executiong word, or even subword level operations instead of bit-level ones, which are usually found in FPGAs.
+%Many embedded applications require high throughput, meaning that a large number of computations needs to be performed every second.
+%At the same time, the power consumption of battery-operated devices needs to be minimized to increase their autonomy.
+
+
+% ---------------------------------------------------------------------
+\section{Context}
+\label{section:context}
+	
+{\it Coarse Grain Reconfigurable Arrays} ({\sc CGRAs}) are reconfigurable
+architectures that have been getting a lot of attention in the past decades.
+These architectures are usually used in embedded systems because they are
+designed to fit very specific needs. This means that even though they are less
+flexible by nature they also have less delay, area, configuration time and
+consume less power compared to Field Programmable Gate Arrays ({\sc FPGAs}), the
+most commonly used reconfigurable architecture. As such CGRAs are meant to work
+as accelerators.
+
+These architectures can either be configured a single time per run of an
+application or configured during the execution of the application. This means
+that {\sc CGRAs} can either have static or dynamic configurations, respectively.
+Static configurations are less flexible while dynamic configurations have to
+account for the time spent doing the reconfiguration itself.
+
+A compiler for an architecture like this has to take into account these
+differences between a traditional architecture, and a reconfigurable one.
+%to which most are designed for.
+However, the basic structure and behavior of the compiler remains unchanged.
+%Most of the basis a compiler needs to have need to still be present however.
+
+%Less flexibility but also less delay, area, power and configuration time.
+%The target applications for these architectures (telecomunications, multimedia eletronics, ...) often spend most of time executing a few {\it time-critical code segments} with well defined characteristics, which means that performance on these applications may be improved by adding a hardware accelerator to the system and mapping these {\it critical} sections to it. Not only that but these sections usually contain {\it loops} and are also proned to have inherent paralelism.
+%Compute intensive kernels are perfect to be mapped to CGRAs, since these can take advantage of the high instruction level parallelism (because of the multiple FUs organized in a mesh).
+%By neglecting non-loop code or outer-loop code that is assumed to be executed on other cores, CGRAs can exploit ILP in loops.
+%CGRAs provide more FUs than typical VLIWs
+
+
+% ----------------------------------------------------------------------
+\section{Motivation}
+\label{section:motiva}
+
+High-level languages, like {\bf C}/{\bf C++} or Java, allow for program
+development without the knowledge of the inner workings of a given
+processor. Furthermore, the development is faster and programs are easier to
+debug or test than using an assembly language for a specific processor. {\it
+  Versat} is programmable in assembly using the {\it picoVersat} instruction
+set. Using the assembler program available for program development is a
+cumbersome form to port existing algorithms to the {\it Versat} platform, most
+of them originally written in {\bf C} or {\bf C++}.  A compiler is essential for
+the test and assessment of the {\it Versat} platform capabilities. A first
+prototype compiler, developed by Rui Santiago~\cite{Santiago2016}, exists and
+was used for the development of some examples. However, the compiler is not only
+not very practical still, but also quite primitive. It supports a limited subset
+of the {\bf C} language with {\bf C++} alike method invocation, with no
+variables, functions or structures. All programming uses the {\it picoVersat}
+register names to hold values. Furthermore, the only {\bf C++} syntax used is
+the method invocation from object (object.method), but this being the only
+difference from {\bf C}, and since there is not the option to create multiple
+instances of these objects (they act as variables), this syntax could simply be
+replaced with a {\bf C} compatible syntax. This would allow for the use of a
+simpler compiler, since in reality none of the extra functionalities of {\bf
+  C++} in relation to {\bf C} are even supposed to be used in this architecture.
+
+\section{Objectives}
+\label{section:objectivo}
+
+The objective of this work is supersede the existing compiler Versat compiler
+improving the following aspects:
+\begin{itemize}
+\item Partial reconfiguration: prepare the next {\it Versat} configuration by changing
+  only the configuration fields that differ. Currently all configuration bits
+  are updated during the reconfiguration, which costs time.
+\item Support a variable number of functional units: the current implementation
+  assumes a fixed number of functional units, and if the hardware is changed, then
+  the compiler needs to change too. This improvement will lift this restriction.
+\item Support variable declarations: currently all variables and objects are
+  predefined and user defined variables are not supported. This improvement
+  will greatly improve programmability.
+\item Support function calls: currently all the code must be written in a single
+  {\tt main()} function and no other functions can be called from this one. This
+  improvement will allow not only for better programming practices, but also to
+  make the code more extensible and easy to understand.
+%\item Support constants definition:
+\end{itemize}
+
+\section{Challenges}
+\label{section:desafio}
+
+Building a full {\bf C} compiler on such a bare/simple instruction set requires
+that most instructions need to be decomposed.  All {\bf C} language operations
+that are not directly supported by the architecture have to be mapped into the
+few existing ones.
+
+Having such reduced register support in {\it picoVersat} requires constant
+memory accesses, and not having a {\it stack pointer}, or a {\it frame pointer},
+makes function calls (in particular recursion) slow.
+
+Detecting, along with regular {\bf C} code, the portions that are meant to be
+computed into instructions for {\it Versat} instead of {\it picoVersat} is
+difficult, not only because there is a need to identify these "packs" of
+instructions, as well as to analyze and to compute these instructions in a
+different way.
+
+\section{Document structure}
+\label{section:parts}
+
+This document is divided into six chapters.  The next chapter, State of the Art,
+introduces the {\it Versat} architecture in its present form, and surveys the
+existing {\bf B} and {\bf C} language compiler frameworks that can be adapted
+into a full {\it Versat} compiler.  Chapter 3, Architecture, provides
+the general architecture of the compiler for the {\it Versat}
+platform.  The {\bf lcc} retargetable {\bf C} compiler was selected because
+it can be easely extended by providing a new {\it Versat} {\it back-end}.
+The following chapter, Development, explores the intrinsics of the
+compiler {\it back-end} development and its integration into the {\bf lcc}
+framework.  Chapter 5, Results, addresses the compiler functionality, efficiency
+and limitations.  The last chapter, Conclusions, sums up the work undertaken.

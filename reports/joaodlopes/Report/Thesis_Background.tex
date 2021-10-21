@@ -1,0 +1,189 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                      %
+%     File: Thesis_Background.tex                                      %
+%     Tex Master: Thesis.tex                                           %
+%                                                                      %
+%     Author: Andre C. Marta                                           %
+%     Last modified :  2 Jul 2015                                      %
+%                                                                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Background}
+\label{chapter:background}
+
+CGRAs have gained increasing attention in the last 2 decades both in
+academia and industry~\cite{Mei05,Lee00,Weinhardt03,Quax04,deSousa12}.
+CGRAs are programmable hardware mesh structures that operate on
+word-length variables and are efficient in terms of operations per unit
+of silicon area. CGRAs can be built with simple components such as adders, subtractors, multipliers, shifters, among others~\cite{Tripp07,deSousa12}.
+CGRAs are a suitable architecture for a vast range of low power devices.
+
+%Insert your chapter material here...
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Important problems}
+\label{section:problems}
+
+A critical aspect for achieving performance speedups is dynamic
+reconfiguration of the CGRA. Static reconfiguration, where the array
+is configured once to run a complete kernel, has poor
+flexibility~\cite{Hartenstein01}. Some arrays are dynamically
+reconfigurable but they only iterate over a fixed sequence of
+configurations~\cite{Quax04,Mei05,Lee00}. These configurations must be
+moved to the CGRA from external memory and stored inside the CGRA,
+which costs memory bandwidth and storage space in the CGRA. Following
+a fixed sequence of configurations means that it is impossible to
+conditionally run a configurations. This limits the programming
+flexibility of the CGRA.
+
+Another important problem is that of the interconnect topology~\cite{Park09}.
+Fully connected graph topologies have been avoided as they scale poorly in
+terms of area, wire delays and power consumption. Since large arrays
+have been preferred over smaller arrays, it has been important to keep
+a lean interconnection structure. However, in this work a relatively
+smaller array is used and the impact of a fully connected topology is
+assessed in terms of silicon area, power and programming flexibility.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Reconfiguration}
+\label{section:reconfiguration}
+
+In order to make the reconfiguration process efficient, full
+reconfiguration of the array should be avoided. In this work we
+exploit the similarity of different CGRA configurations by using {\it
+partial reconfiguration}. If only a few configuration bits differ
+between two configurations, then only those bits are changed. Most
+CGRAs are only fully reconfigurable~\cite{Mei05,Lee00,Hartenstein99}
+and do not support partial reconfiguration. The disadvantage of performing
+full reconfiguration is the amount of configuration data that must be kept
+and/or fetched from external memory. Previous CGRA architectures with support
+for partial reconfiguration include RaPiD~\cite{Ebeling96} and PACT~\cite{Weinhardt03}. RaPiD supports dynamic (cycle by cycle) partial reconfiguration for a subset of the configuration bitstream, which suggests
+that the loop body may take several cycles to execute. The reconfiguration
+process in PACT is reportedly slow and users are recommended to avoid it and
+resort to full reconfiguration whenever possible. We do not have data to make
+performance comparisons with these approaches, but, compared to~\cite{Ebeling96}, our partial reconfiguration happens between program loops instead of cycle
+by cycle, and the loop body executes in only one cycle. Compared to~\cite{Weinhardt03}, our partial reconfiguration is fast and is used frequently.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Address Generation}
+\label{section:addressGenerator}
+
+The main contribution in~\cite{deSousa12} was the invention of an address
+generation scheme able to support groups of nested loops in a single
+machine configuration. The idea, aimed at reducing reconfiguration
+time, was inspired by the use of cascaded counters for address
+generation~\cite{Carta06}. This represented a major improvement from other
+works that focus exclusively in supporting the inner loops of compute kernels~\cite{deSutter10}. However, as this report shows, more can be done
+in terms of address generation to reduce the reconfiguration overhead.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Heterogeneity versus Homogeneity}
+\label{section:heterogeneityVsHomogeneity}
+
+The question of heterogeneity versus homogeneity of the functional
+units inside a CGRA is an important one. Some CGRAs are
+homogeneous~\cite{Ebeling96}, i.e., they only have one type of functional unit,
+whereas others are heterogeneous and support a diversity of functional
+units~\cite{Heysters03}. A careful analysis in~\cite{Park12} has favored
+heterogeneous CGRAs as the performance degradation when going from homogeneous
+to heterogeneous is greatly compensated by the silicon utilization rate and
+power efficiency of heterogeneous solutions. Thus, we adopt heterogeneous CGRAs
+in this project.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Compiler}
+\label{section:compiler}
+
+Compiler support for CGRAs is probably the most difficult aspect. Not
+only a compiler has to make use of standard compilation techniques,
+especially the well known modulo scheduling approach used in VLIW
+machines~\cite{Rau94}, but also Computer-Aided Design (CAD) techniques
+are needed, such as those used in FPGA compilation~\cite{Betz99}. One
+attempt to circumvent the compiler difficulties is to formulate CGRAs as
+vector processors~\cite{Severance13,Severance14,Naylor14}. In those approaches,
+instructions are the equivalent of small configurations, and their
+authors claim several orders of magnitude speedup in certain
+applications. However, the user has to work at a very low level to
+make use of vector instructions. We propose as a solution to this
+problem the adoption of programming interfaces such as Open Computing Language
+(OpenCL)~\cite{Stone10}, now very popular for Graphics Processing Units (GPUs)
+and FPGAs in heterogeneous computing environments.
+
+A new compiler for Versat has been developed in parallel with this
+work. The use of standard compilers such as {\it gcc} or {\it llvm}
+has been investigated. However, classical compilers are good at
+producing sequences of instructions, not sequences of hardware
+datapaths. For this reason, it has been decided that a specific
+compiler needed to be developed. The compiler is simple as its
+functionality has been restricted to the tasks that CGRAs can do
+well. The syntax of the programming language is a subset of the C/C++
+language with a semantics that enables the description of hardware
+datapaths. The compiler is not described in this report whose main
+thrust is the description of the architecture and Very-Large-Scale
+Integration (VLSI) implementation.
+
+%Other models...
+
+\begin{comment}
+
+CGRAs have gained increasing attention in the last 2 decades both in
+academia and industry
+\cite{Mei05,Lee00,Weinhardt03,Quax04,deSousa12}. CGRAs are
+programmable hardware mesh structures that operate on word-length
+variables and are efficient in terms of operations per unit of silicon
+area. CGRAs can be built with RISC processor arrays \cite{Waingold97}
+or simpler components such as adders, subtractors, multipliers,
+shifters, etc \cite{Tripp07,deSousa12}. We have identified the latter
+CGRAs as the most suitable architecture for a vast range of low power
+devices. A good survey of CGRAs is given in \cite{deSutter10}.
+
+The main contribution in \cite{deSousa12} was the invention of an
+address generation scheme able to support groups of nested loops in a
+single machine configuration. The idea, aimed at reducing
+reconfiguration time, was inspired by the use of cascaded counters for
+address generation \cite{Carta06}. This represented a major
+improvement from other works that focus exclusively in supporting the
+inner loops of compute kernels \cite{deSutter10}.  However, as this
+paper shows, more can be done to reduce the reconfiguration overhead.
+
+A critical aspect for achieving performance speedups is dynamic
+reconfiguration of the CGRA. Static reconfiguration where the array is
+configured once to run a complete kernel is far less flexible
+\cite{Hartenstein01}. Some arrays are dynamically reconfigurable but
+they only iterate over a fixed sequence of configurations
+\cite{Quax04,Mei05,Lee00}.
+
+The question of heterogeneity versus homogeneity of the functional
+units inside a CGRA is an important one. Some CGRAs are homogeneous
+\cite{Ebeling96}, whereas others support a diversity of FUs
+\cite{Heysters03}. A careful analysis in \cite{Park12} has favored
+heterogeneous CGRAs as the performance degradation when going from
+homogeneous to heterogeneous is greatly compensated by the silicon
+utilization rate and power efficiency of heterogeneous
+solutions. Thus, we adopt heterogeneous CGRAs in this project.
+ 
+Another important problem is that of the interconnect topology
+\cite{Park09}. Fully connected graph topologies have been avoided as
+they scale poorly in terms of area, wire delays and power
+consumption. In this work this technique is nevertheless used to
+exploit the fact that frequencies of operation are anyway low.
+
+Compiler support for CGRAs is probably the most difficult aspect. Not
+only a compiler has to make use of standard compilation techniques,
+especially the well known modulo scheduling approach used in VLIW
+machines \cite{Rau94}, but also CAD techniques are needed, such as
+those used in FPGA compilation \cite{Betz99}. One attempt to
+circumvent the compiler difficulties is to formulate CGRAs as vector
+processors \cite{Severance13,Severance14,Naylor14}. In those
+approaches, instructions are the equivalent of small configurations,
+and their authors claim several orders of magnitude speedup in certain
+applications. However, the user has to work at a very low level to
+make use of vector instructions. We propose as a solution to this
+problem the adoption of programming interfaces such as OpenCL
+\cite{Stone10}, now very popular for GPUs and FPGAs in heterogeneous
+computing environments.
+
+\end{comment}

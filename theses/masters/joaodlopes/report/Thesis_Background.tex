@@ -1,0 +1,167 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                      %
+%     File: Thesis_Background.tex                                      %
+%     Tex Master: Thesis.tex                                           %
+%                                                                      %
+%     Author: João D. Lopes                                            %
+%     Last modified :  1 October 2017                                  %
+%                                                                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Background}
+\label{chapter:background}
+
+% CGRAs on industry (add CGRA references)
+
+CGRAs have gained increasing attention in the last two decades both in
+academia and industry~\cite{Lee00,Mei05,Weinhardt03,Quax04,deSousa12}.
+They are programmable hardware mesh structures that operate on
+word-length variables and are efficient in terms of operations per
+unit of silicon area. CGRAs nodes are generally ALUs with high-level
+operations such as addition, subtraction, multiplication, shifting,
+etc.~\cite{Tripp07}. The CGRA is a suitable architecture for low power
+systems. In this chapter, the relevant CGRA literature is
+reviewed. The chapter is organized in the following topics:
+interconnect topology, reconfiguration, address generation,
+heterogeneity versus homogeneity and compiler.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Interconnect topology}
+
+An important aspect of CGRAs is the interconnect
+topology~\cite{Park09}. Fully connected graph topologies have been
+avoided as they scale poorly in terms of area, wire delays and power
+consumption. Since large arrays have been preferred over smaller
+arrays, it has been important to keep a lean interconnection
+structure. However, in this work a relatively smaller array is used
+which permits the use a fully connected topology, as the area,
+frequency and power results demonstrate.
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Reconfiguration}
+\label{section:reconfiguration}
+
+
+%dynamic vs static
+A critical aspect for achieving CGRA programmability is the dynamic
+reconfiguration of the array. Static reconfiguration, where the array
+is configured once to run a complete kernel, has poor
+flexibility~\cite{Hartenstein01}. Some arrays are dynamically
+reconfigurable but they only iterate over a fixed sequence of
+configurations~\cite{Lee00,Mei05,Quax04}. These configurations must be
+moved to the CGRA from an external memory and stored inside the CGRA,
+which costs memory bandwidth and internal storage space. Following a
+fixed sequence of configurations means that it is impossible to
+conditionally choose the next configuration. Furthermore, in many
+cases, it is the host system that manages the
+reconfiguration~\cite{Lee00,Mei05,Hartenstein99}. This is innefficient
+as the host could be doing more useful tasks. It also makes
+programming and integrating CGRAs in an embedded system difficult.
+
+% full vs partial
+In order to make the reconfiguration process efficient, full
+reconfiguration of the array should be avoided. In this work we
+exploit the similarity of different CGRA configurations by using {\em
+  partial reconfiguration}. If only a few configuration bits differ
+between two configurations, then only those bits are changed. Most
+CGRAs are only fully reconfigurable~\cite{Lee00,Mei05,Hartenstein99}
+and do not support partial reconfiguration. The disadvantage of
+performing full reconfiguration is the amount of configuration data
+that must be kept and/or fetched from external memory. Previous CGRA
+architectures with support for partial reconfiguration include
+RaPiD~\cite{Ebeling96}, PACT~\cite{Weinhardt03} and
+RPU~\cite{Liu15}. RaPiD supports dynamic (cycle by cycle) partial
+reconfiguration for a subset of the configuration bitstream, which
+implies that the loop body may take several cycles to execute. The
+partial reconfiguration process in PACT is reportedly slow and users
+are recommended to avoid it and resort to full reconfiguration
+whenever possible. In RPU, a kind of partial reconfiguration called
+Hierarchical Configuration Context is proposed to mitigate these
+problems.  Data to make performance comparisons with these approaches
+have not been found but, compared to~\cite{Ebeling96}, the partial
+reconfiguration in this work happens between program loops instead of
+every clock cycle, and the whole loop body executes in only one
+cycle. Compared to~\cite{Weinhardt03}, this partial reconfiguration is
+fast and used more frequently.
+
+Moreover, in this approach the configurations are {\em
+  sef-generated}. This way, the host does not have to manage the
+reconfiguration process and is free to perform more useful tasks.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Address Generation}
+\label{section:addressGenerator}
+
+Address generation is a well known topic. CPU architectures use
+Address Generation Units (AGUs) to compute memory addresses, in order
+to improve
+performance~\cite{van2006address,wijeratne20079,cormie2002arm11}.
+This computation is associated with load/store instructions.
+
+The main contribution in~\cite{deSousa12} was the invention of an
+address generation scheme able to support groups of nested loops
+expressed in a single CGRA configuration. The idea, was to reduce the
+reconfiguration time and was inspired by the use of cascaded counters
+for address generation~\cite{Carta06}. This represented a major
+improvement compared to other works that focus exclusively in
+accelerating the inner loops of compute kernels~\cite{deSutter10}.
+However, as this thesis shows, more can be done in terms of address
+generation for reducing the reconfiguration overhead.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Heterogeneity versus Homogeneity}
+\label{section:heterogeneityVsHomogeneity}
+
+The question of CGRA heterogeneity versus homogeneity in terms of the
+functional units is an important one. Some CGRAs are
+homogeneous~\cite{Ebeling96}, i.e., they only have one type of
+functional unit, whereas others are heterogeneous and support a
+diversity of functional units~\cite{Heysters03}. A careful analysis
+done in~\cite{Park12} has favored heterogeneous CGRAs, arguing that
+the performance degradation when going from a homogeneous to a
+heterogeneous architecture is greatly compensated by the better
+silicon area utilization and power efficiency of heterogeneous
+solutions. Hence, heterogeneous CGRAs have been adopted in this
+project.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Compiler}
+\label{section:compiler}
+
+Compiler support is probably the most difficult aspect of CGRAs. CGRA
+compilers make use of standard compilation techniques, especially the
+well-known modulo scheduling approach used in VLIW
+machines~\cite{Rau94}, and of more exotic techniques like the place
+and route algorithms used in FPGA compilation~\cite{Betz99}.
+
+One attempt to circumvent the compiler difficulties is to formulate
+CGRAs as vector processors~\cite{Severance13,Severance14,Naylor14}. In
+those approaches, instructions are the equivalent of small
+configurations, and their authors claim several orders of magnitude
+speedup in certain applications. However, the user has to work at a
+very low level to make use of vector instructions. 
+
+A new compiler for Versat has been
+developed~\cite{Santiago2016}. Before, the use of standard compilers
+such as {\em gcc} or {\em llvm} for Versat has been
+investigated. However, it has been concluded that these compilers are
+good at producing sequences of instructions but not sequences of
+hardware datapaths. For this reason, it has been decided that a
+specific compiler was needed. The developed compiler is simple as it
+focuses on the tasks done in Versat's reconfigurable array while
+performing little or no optimizations on the sequence of instructions
+run by Versat's controller. There was no need to use complex {\em
+  place \& route} algorithms thanks to Versat's full mesh
+topology. The syntax of the Versat programming language is a subset of
+the C/C++ language with a semantics that enables the description of
+hardware datapaths. The compiler is not described in this thesis whose
+main thrust is the description of the architecture and its
+Very-Large-Scale Integration (VLSI) implementation.
+

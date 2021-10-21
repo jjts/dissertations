@@ -1,0 +1,23 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                      %
+%     File: Thesis_Introduction.tex                                    %
+%     Tex Master: Thesis.tex                                           %
+%                                                                      %
+%     Author: Andre C. Marta                                           %
+%     Last modified :  2 Jul 2015                                      %
+%                                                                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Introduction}
+\label{chapter:introduction}
+Convolutional Neural Networks (CNNs) are the most commonly used methods to develop accurate object detection and classification algorithms. Some networks divide the problem in two stages: proposing interest regions and perform object localization on each one, like the R-CNN based networks~\cite{R-CNN, Fast_R-CNN, Faster_R-CNN, FPN_FRCN}. Other approaches like~\cite{Yolov1_DBLP:journals/corr/RedmonDGF15, Yolov2_redmon2016yolo9000, yolov3} use a end-to-end solution that makes predictions directly from the input image. These networks trade some accuracy for speed.
+
+As the CNN models evolve, they become increasingly more demanding in terms of computation and memory accesses. CNNs are trained and deployed on GPUs that achieve a high amount of operations, leveraging time parallelism with Single Instruction Multiple Data (SIMD) architectures, specially effective for processing multiple images (batches). However, these devices also have a significant power demand.
+
+To tackle CNN power demand, there has been a trend to develop hardware dedicated for CNN inference acceleration in reconfigurable hardware architectures such as Field Programmable Gate Arrays (FPGAs), where the power consumption is lower and comes mainly from the memory accesses. These devices allow for the application of a range of optimization techniques.
+
+Coarse-Grained Field Arrays (CGRAs) enable the same parallelism exploration possibilities found in FPGA devices, but at the Functional Unit (FU) level. The higher level datapath manipulation allows for the creation of tool-chains that facilitated the development of accelerators for different networks, lowering the barrier of entry to use such devices.% The viability of such solutions depends on the quality of the provided FUs.
+
+This work focuses on establishing a background to serve as basis for the development of improvements for the Deep Versat~\cite{VMario:Deep_Versat} CGRA, enabling the execution of a object detection CNN in real time.
+
+The second chapter provides an overview on neural networks, focussing on inference for the common layers in CNNs. This chapter features an analysis of the YOLOv3~\cite{yolov3} network and Tiny-Yolov3 a smaller version targeting embedded devices. The third chapter outlines the main methods used in CNN acceleration, highlighting datapath optimization and quantization. At the end of the chapter takes place an introduction to CGRAs and analysis of the Deep Versat~\cite{VMario:Deep_Versat} architecture. The fourth chapter elaborates on the planned work based on the state-of-the-art review performed in the previous chapters. %At the end a calendarization of the planned tasks is presented.

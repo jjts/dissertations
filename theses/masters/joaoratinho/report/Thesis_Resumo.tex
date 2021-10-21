@@ -1,0 +1,38 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                      %
+%     File: Thesis_Resumo.tex                                          %
+%     Tex Master: Thesis.tex                                           %
+%                                                                      %
+%     Author: Andre C. Marta                                           %
+%     Last modified :  2 Jul 2015                                      %
+%                                                                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Resumo}
+
+% Add entry in the table of contents as section
+\addcontentsline{toc}{section}{Resumo}
+
+Esta tese apresenta um novo ambiente de simulação para a arquitectura RV32-Versat baseado 
+na ferramenta de simulação Verilator. A arquitectura RV32-Versat consiste no processador 
+PicoRV32, com arquitectura RISC-V, ligado ao Versat. Este novo ambiente de 
+simulação apresenta vantagens significativas quando comparado com os ambientes de 
+simulação mais tradicionais que usam simuladores baseados em eventos. A primeira vantagem 
+é a rapidez: o novo ambiente é significativamente mais rápido, poupando assim tempo no 
+processo de desenvolvimento de novas aplicações para a arquitectura RV32-Versat. A 
+segunda vantagem é o custo: o Verilator é disponibilizado com uma licença gratuita, 
+enquanto os simuladores baseados em eventos típicos necessitam de licenças caras, 
+difíceis de justificar para pequenas empresas e projectos. A terceira e última vantagem é 
+o suporte directo para a co-simulação de \textit{software} e \textit{hardware}. Os 
+simuladores baseados em eventos falham neste ponto, mas o novo ambiente baseado no 
+Verilator resolve este problema, permitindo uma boa integração através do uso de C++ ou 
+SystemC. Este novo ambiente de simulação é o resultado de um estudo detalhado, por um 
+lado, dos diferentes tipos de simuladores existentes, e por outro lado, da arquitectura 
+RV32-Versat, também apresentada nesta tese.
+
+\vfill
+
+\textbf{\Large Palavras-chave:} Matrizes Reconfiguráveis de Grão Grosso, Ambiente de 
+Simulação, Verilator, Simulação de Matrizes Reconfiguráveis de Grão Grosso, Simulação de 
+Alto Nível, Co-Simulação
+

@@ -1,0 +1,138 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                      %
+%     File: Thesis_Conclusions.tex                                     %
+%     Tex Master: Thesis.tex                                           %
+%                                                                      %
+%     Author: Gonçalo Santos                                           %
+%     Last modified : 20 Oct 2018                                      %
+%                                                                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Conclusion}
+\label{chapter:conclusao}
+
+% In this thesis we set out to develop a
+The development of a full compiler for the {\it Versat} architecture is a
+complex task. As any compiler, the main purpose is to provide code translation
+from a high-level language, like the {\bf C} programming language, to the
+assembly language accepted by the {\it Versat} architecture.  Although a simple
+compiler exists, it only provides for very simple language constructs.  It does
+not support variables or declarations, only the processor registers are
+available.  Also, no functions or structures are supported, making the algorithm
+development difficult.  This work aims at providing a complete {\bf C} language
+compiler for the {\it Versat} architecture.
+
+The first step was to decide whether to improve the existing compiler or to
+develop a new compiler. Due to the limitations of the existing compiler, the
+lack of documentation or support, it was decided to develop a new compiler
+altogether. However, there are quite a few compiler frameworks, namely for the
+{\bf C} language, that can be used to build a compiler for a new architecture.
+Although they do not provide out of the box support a processor like
+{\it Versat}, they are retargetable compilers, i.e., they offer support for
+many different processors.
+After an analysis of some of the more widespread retargetable {\bf
+  C} compilers, the {\bf lcc} compiler framework was selected. It provided a
+code generation selection tool to ease the code generation process, and select
+the lowest cost instruction sequence. The compiler was supported by good
+documentation and examples for the most widespread high-end processors.
+
+The bulk of the work is developed in a {\it back-end} file that describes
+the capabilities of the {\it picoVersat} assembler, from the point of view of
+a {\bf C} language compiler.
+The {\it picoVersat} {\it back-end} is configured through a structure that
+parameterizes the code generator, and includes a set of routine pointers to
+specific {\it back-end} procedures.
+These procedures handle specific parts of the code generation, such as the
+preamble or the activation record for each user defined routine.
+However, most operations are described by a tree grammar.
+The tree grammar describes most target processor operations with an associated
+cost. Instruction selection optimization is achieved by providing different
+tree grammar combination of different costs.
+
+The {\tt asm} extension was added to {\bf lcc} to provide direct control
+over {\it Versat} and {\it picoVersat}.
+This extension required changes to the compiler {\it front-end}, since
+{\bf lcc} is an {\sc ANSI} compiler.
+The {\tt asm} extension was initially introduced by {\bf gcc}, but has
+been added to other compilers, although it is not standard {\bf C}.
+
+The register assignment can be tailored to each processor characteristics.
+For {\it picoVersat}, different combinations of temporary ({\tt tmask})
+and variable ({\tt vmask}) register assignment combinations were tested.
+The register usage and total execution clock time was measured for a set
+examples with different register requirements.
+A balanced version, with almost the same number of temporary and variable
+register was selected.
+
+
+% ----------------------------------------------------------------------
+\section{Achievements}
+\label{section:achievements}
+%The major achievements of the present work...
+
+%Please fix
+%1. cgra state-of-the art
+%2. Versat review
+%3. compiler state-of-art
+%4. Sketch of the compiler to be developed (after chapter 3 is fixed)
+The present work introduces the {\sc CGRA} concept and analyses the {\it Versat}
+accelerator and its {\it picoVersat} controller.  It highlights the {\it Versat}
+characteristics from a programming point of view, so that a compiler can be
+developed.  It introduces the basic compiler development techniques and surveys
+existing retargetable {\bf C} language compilers.  After a comparative analysis,
+a {\it Versat} compiler is introduced as an evolution of an existing {\bf C}
+language compiler.
+% lcc Back-end
+% instruction selection and specific coding of some instructions (requiring loops or labels)
+% register assignment and stack/frame pointers
+% asm in lcc
+
+The development work first addressed the support for {\it picoVersat} as an
+{\bf lcc} compiler {\it back-end}.
+Integration of the compiler with {\bf lcc}'s own preprocessor ({\bf cpp}),
+the {\it Versat} assembler ({\bf va}) and the {\it Verilog} simulator
+({\bf iverilog}) was added for a smooth compilation of examples from source
+to execution.
+A large set of regression tests ensure that future changes do not compromise
+existing functionality.
+Then mechanisms were added for the control of the {\it Versat} {\sc CGRA},
+using {\bf C} language structures and assembler macros.
+
+The resulting compiler provides all the requirements initially set out for
+this work as referred in section~\ref{section:objectivo}.
+
+% ----------------------------------------------------------------------
+\section{Future Work}
+\label{section:futuro}
+
+As previously concluded, the task to be undertaken required the development of
+the compiler for the {\it Versat} architecture using the existing retargetable
+{\bf lcc} compiler framework for the {\bf C} language.  Future work should
+essentially address some of the limitations referred in
+section~\ref{limitations}, namely {\it bits-per-byte}, wide integers and
+floating point numbers.
+
+Since {\it Versat} only manipulates 32-bit quantities and the {\bf C} language
+imposes that {\tt sizeof(char)==1}, the usual 8 {\it bits-per-byte} of most
+compilers, including {\bf lcc}, do not hold true in the {\it Versat}
+architecture. To allow {\tt sizeof(char)} to be 32-bits wide, significant
+changes had to be made to the core of the {\bf lcc} compiler. These changes were
+not performed, resulting in the limitation, referred in
+section~\ref{limitations}, that a literal must first be assigned to an integer
+variable and only then this variable can be assigned to an integer pointer,
+since the conversion does not truncate the original literal value.
+Additionally, shift operations emit a warning message when shifted by a literal
+for more than 8 bits.
+
+Support for 64-bit wide integers, known as {\tt long long} in {\bf C}, can be
+added. However all operations must be performed by software routines, since {\it
+  picoVersat} only handles 32-bit integers. Nevertheless, this requires changes
+to the compiler, since even basic operations, like addition or subtraction, must
+emit function calls to the respective software routines, instead of the {\it
+  picoVersat} assembly instructions.  As for 64-bit wide integers, floating
+point support would require the same approach.  Until then, the compiler emits
+an error message whenever those data types are used in the programs being
+compiled.
+
+\cleardoublepage
+

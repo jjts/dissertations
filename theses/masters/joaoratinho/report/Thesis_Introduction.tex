@@ -1,0 +1,99 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                      %
+%     File: Thesis_Introduction.tex                                    %
+%     Tex Master: Thesis.tex                                           %
+%                                                                      %
+%     Author: Andre C. Marta                                           %
+%     Last modified :  2 Jul 2015                                      %
+%                                                                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Introduction}
+\label{chapter:introduction}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Motivation}
+\label{section:motivation}
+
+In any digital circuit simulation is fundamental to verify if the circuit is
+working properly in the different stages of its development. The motivation for
+this thesis became clear when I started working with Versat about a year ago, in
+the context of an internship in which I had the opportunity to participate in
+the development of an MP3 encoder. During that project I was able to understand
+the main limitations of the simulation environments using traditional
+simulators: they are slow with complex simulations, many times require costly
+licences and they provide a difficult integration of software / hardware
+co-simulation, many times leading to the use of ad hoc solutions.
+
+These limitations gave me the motivation to look for a solution that would
+address them, therefore making the simulation process during a project faster,
+cheaper, more efficient and with an integrated support for software and hardware
+co-simulation. That way, industrial projects like the one I participated in
+could be done in a much more efficient way, which can be very important for
+companies with little resources.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Objectives}
+\label{section:objectives}
+
+The main goal of this thesis is to develop a new simulation environment for the
+RV32-Versat system that is able to overcome the typical problems inherent to
+using simulation environments based on traditional simulators, as referred in
+the previous section. The RV32-Versat system consists of a Versat \ac{CGRA},
+controlled by a RISC-V PicoRV32 processor and has been developed in the context
+of two masters theses, including this one.
+
+Consequently, the new simulation environment has three main objectives. The
+first one is being considerably faster than simulating the RV32-Versat
+architecture with commercial simulators. This can be particularly useful when
+developing new applications for this architecture, since it saves time during
+the debug process. The second objective is being cheaper than traditional
+simulators, saving resources. Finally, the third objective is to support
+hardware and software co-simulation in an integrated evironment rather than
+using special interfaces and/or ad hoc solutions.
+
+Fulfilling these objectives required studying the current state of the art of
+the simulators and the RV32-Versat architecture. This way, it was possible to
+understand what types of simulators are more suitable for the Versat
+architecture. To validate the simulation environment, a convolutional neural
+network application for recognizing hand-written digits has been developed.
+This application has also been used to benchmark different commercially
+available simulators.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Author's Work}
+\label{section:work}
+
+This work was developed during an internship at IObundle, Lda, the
+company that developed the Versat architecture. The internship started in
+September 2018 and allowed the candidate to gain a deeper knowledge of the
+Versat architecture, mainly by participating in a project with an
+international client where the Versat architecture was used to accelerate
+the front end of an MP3 encoder.
+
+The work presented here is the result of the work of a few people: both the
+PicoRV32 processor and the Versat \ac{CGRA} had been previously created, and the
+RV32-Versat architecture was developed in collaboration with another student
+that is developing a multi-layer architecture for RV32-Versat. Therefore, the main 
+contributions made by the candidate for this architecture were the removal of the 
+controller previously used by Versat, called PicoVersat~\cite{picoversat}, replacing it 
+by the PicoRV32 processor, the development of the application presented in 
+Section~\ref{section:application} and the creation of a new simulation environment.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Thesis Outline}
+\label{section:outline}
+
+This thesis is composed of 6 more chapters. In the second chapter the
+RV32-Versat architecture is presented, in order to contextualize the other
+chapters. The state of the art of \ac{CPU} and \ac{CGRA} simulators is detailed
+in chapter 3. In the fourth chapter, a simulation environment using typical
+commercial simulators is presented and their problems are reported. In the fifth
+chapter the new simulation environment is presented, which overcomes the
+problems of the previous one. In the sixth chapter the results with the
+simulation environments are shown and, finally, in the seventh chapter the
+conclusions are presented.
+

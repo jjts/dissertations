@@ -1,0 +1,56 @@
+\newcommand{\greyrow}{\rowcolor[rgb]{0.9,0.9,0.9}}
+\newcommand{\whiterow}{\rowcolor[rgb]{1,1,1}}
+\newcommand{\greycell}[1]{\multicolumn{1}{{>{\columncolor[rgb]{0.9,0.9,0.9}}c}}{#1}}
+\newcommand{\lightgreycell}[1]{\multicolumn{1}{{>{\columncolor[rgb]{0.9,0.9,0.9}}c}}{#1}}
+\newcommand{\mediumgreycell}[1]{\multicolumn{1}{{>{\columncolor[rgb]{0.8,0.8,0.8}}c}}{#1}}
+\newcommand{\darkgreycell}[1]{\multicolumn{1}{{>{\columncolor[rgb]{0.7,0.7,0.7}}c}}{#1}}
+\newcommand{\whitecell}[1]{\multicolumn{1}{{>{\columncolor[rgb]{1,1,1}}c}}{#1}}
+
+\newcommand{\cellformatG}[1]{\multicolumn{1}{{>{\columncolor[rgb]{.9,.9,.9}}c}}{#1}}
+\newcommand{\cellformatW}[1]{\multicolumn{1}{{>{\columncolor[rgb]{1,1,1}}c}}{#1}}
+\newcommand{\cellformatlG}[1]{\multicolumn{1}{{|>{\columncolor[rgb]{.9,.9,.9}}c}}{#1}}
+\newcommand{\cellformatlW}[1]{\multicolumn{1}{{|>{\columncolor[rgb]{1,1,1}}c}}{#1}}
+\newcommand{\cellformatrG}[1]{\multicolumn{1}{{>{\columncolor[rgb]{.9,.9,.9}}c|}}{#1}}
+\newcommand{\cellformatrW}[1]{\multicolumn{1}{{>{\columncolor[rgb]{1,1,1}}c|}}{#1}}
+\newcommand{\cellformatlrG}[1]{\multicolumn{1}{{|>{\columncolor[rgb]{.9,.9,.9}}c|}}{#1}}
+\newcommand{\cellformatlrW}[1]{\multicolumn{1}{{|>{\columncolor[rgb]{1,1,1}}c|}}{#1}}
+
+\begin{table}[h]
+\centering
+\caption{Transistor Density Comparison}
+\label{table:Table Transistor Densisty}
+\begin{tabular}{c c c c}
+\hlinew{0.08cm}
+\cellformatrG{}&\cellformatlrG{}&\cellformatlrG{}&\cellformatlG{}\\
+\cellformatrG{\multirow{-2}{*}{Device}} &
+\cellformatlrG{\multirow{-2}{2cm}{\centering Millions of Transistors}}&
+\cellformatlrG{\multirow{-2}{1.8cm}{\centering Die Area $(mm^2)$ }}&
+\cellformatlG{\multirow{-2}{2cm}{\centering Density}}
+\\
+\hlinew{0.08cm}
+\greyrow \multicolumn{4}{c}{GPU}
+\\
+\hlinew{0.04cm}
+\cellformatrW{Nvidia GTX 670 (2012 - 28 nm) \cite{G600Wiki2013} } & \cellformatlrW{3540} & \cellformatlrW{294} & \cellformatlW{\emph{12.04}}\\
+\cellformatrW{AMD Tahit RV1070 (2011 - 28nm) \cite{CountWiki2013} } & \cellformatlrW{4312} & \cellformatlrW{365} & \cellformatlW{11.81}\\
+\cellformatrW{Nvidia GF100 Fermi(2010 - 40 nm) \cite{CountWiki2013} } & \cellformatlrW{3200} & \cellformatlrW{526} & \cellformatlW{6.08}\\
+\cellformatrW{AMD Caymn RV870 (2010 - 40 nm) \cite{CountWiki2013} } & \cellformatlrW{2154} & \cellformatlrW{334} & \cellformatlW{6.44}\\
+\cellformatrW{AMD RV790XT (2008 - 55nm) \cite{CountWiki2013} } & \cellformatlrW{959} & \cellformatlrW{282} & \cellformatlW{3.40}\\
+\cellformatrW{NVIDIA GT200 Tesla (2008 - 55nm) \cite{CountWiki2013} } & \cellformatlrW{1400} & \cellformatlrW{576} & \cellformatlW{2.43}\\
+\hlinew{0.08cm}
+\greyrow \multicolumn{4}{c}{CPU}
+\\
+\hlinew{0.04cm}
+\cellformatrW{Intel Ivy Bridge (22 nm -2012) \cite{AnnandIvy2012}} & \cellformatlrW{1400} & \cellformatlrW{160} & \cellformatlW{8.75}\\
+\cellformatrW{Amd Trinity (32nm - 2012) \cite{AnnandTrinity2012}} & \cellformatlrW{1178} & \cellformatlrW{228} & \cellformatlW{5.17}\\
+\cellformatrW{Intel Xeon 2690EP (32 nm -2011) \cite{JohanXeon2011}} & \cellformatlrW{2260} & \cellformatlrW{416} & \cellformatlW{5.43}\\
+\cellformatrW{Amd Bulldozer 8 Cores (32 nm - 2011) \cite{AnnandBulldozer2011} } & \cellformatlrW{1200} & \cellformatlrW{315} & \cellformatlW{3.81}\\
+\multicolumn{4}{c}{\vspace*{-0.3cm}}\\
+%%%%%%%%%%%%% Third PART OF THE TABLE %%%%%%%%%%%%%%%%%%%%%%%%
+\hlinew{0.08cm}
+\greyrow \multicolumn{4}{c}{FPGA}
+\\
+\hlinew{0.04cm}
+\cellformatrW{Xilinx Virtex-7 2000 T (28nm - 2011) \cite{yannou2011X3d} } & \cellformatlrW{6800} & \cellformatlrW{529} & \cellformatlW{\emph12.85}\\
+\end{tabular}
+\end{table}

@@ -1,0 +1,6 @@
+{ "signal" : [
+  { "name": "SCLK", "wave": "0.P.....0", "period":4},
+  { "name": "SS", "wave": "10......1", "phase" :0,"period":4},
+  { "name": "MOSI", "wave": "x........", "phase" :0, "period":4},
+  { "name": "MISO", "wave": "xx010110x", "phase" :2, "period":4}
+]}

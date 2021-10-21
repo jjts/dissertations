@@ -1,0 +1,46 @@
+\chapter{Introduction}
+\label{chapter:introduction}
+
+Object detectors have a wide range of application fields such as security (e.g., face detection), transportation (e.g., autonomous driving), military (e.g., aircraft detection) and medical (e.g., computer aided diagnosis)~\cite{jiao:obj_survey}. Their task consists in classifying and locating multiple objects in an image from predefined categories. General-purpose object detectors focus on detecting a broad range of natural categories from highly structured objects (e.g., car, bicycle) to articulated objects (e.g., person, dog), rather than specific categories (e.g., faces)~\cite{liu:obj_survey}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Motivation}
+
+Object detection has been under extensive research in both academia~\citep{jiao:obj_survey, liu:obj_survey, zhao:obj_survey} and real world applications~\citep{unlu:real_app, ramesh:real_app}. Traditional approaches were based on handcrafted low-level features and shallow trainable architectures. Their performance were limited due to the difficulty of manually designing a robust feature extractor and combining low-level features with high-level context from classifiers~\cite{Mahony:trad}.   
+
+Recent technological breakthroughs led to the fast evolution of object detectors. The main contributions include the development of deep neural networks (DNNs) and the increase of the hardware computing power. State-of-art object detectors use DNNs with deeper architectures to learn more complex features without the need to design them manually.
+
+The superior accuracy of DNNs comes at the cost of high computational complexity with tens of millions of parameters and billions of operations (i.e., additions and multiplications) . Therefore, these networks require parallel computation, high data reusability and large memory bandwidth~\cite{feng:obj_survey}. Graphics Processing Units (GPUs) have been the most common programmable accelerators for deploying DNNs due to their high parallelization and high-speed floating point computing power.
+
+GPUs use large-size batch to perform parallelization, which requires the simultaneous input of several images. For real-time applications with the need to process images frame by frame, this strategy is not viable due to the considerable latency of each frame. Moreover, GPUs cannot be deployed in embedded systems as a result of their high power consumption.
+
+Recent studies~\citep{ma:loop_opt, sze:dnn_survey, Abdelouahab:dnn_survey, Guo:dnn_survey} have been using Field Programmable Gate Arrays (FPGAs) as a more energy-efficient alternative to GPUs for deploying DNNs. FPGAs present advantages in terms of high flexibility to design application-specific hardware, fixed-point calculation, parallel computing and low power consumption. The dataflow is a main concern when designing these programmable accelerators.
+
+Accelerators based on Coarse Grained Reconfigurable Arrays (CGRAs) for DNNs have also being further investigated~\citep{auto_tuning_cgra, alexnet_cgra}. A CGRA is a programmable hardware circuit from the same family of the FPGAs but with a lighter configuration infrastructure, resulting in less silicon area and lower cost.  
+
+<<<<<<< HEAD
+One motivation behind this work is the development of an object detection dedicated system that minimizes energy consumption and maximizes performance with reduced hardware size and cost. The deployment of a real-time FPGA-based general-purpose object detector is a major and current challenge. This detector is entitled to be accelerated using the Deep Versat CGRA architecture~\cite{valter:deep_versat}, which was developed at the INESC-ID Research Institute.
+
+Most FPGA-based object detectors in literature use development boards. Some systems~\citep{long:fpga_demo, bochem:fpga_demo} receive images from a camera using specialized protocols and transfer their results (i.e., detections) to a host PC through well known interfaces such as UART or Ethernet. Other works install an operating system in the board to harness the integration of the input camera and the output video streaming~\cite{llorente:fpga_demo}.
+=======
+One motivation behind this work is the development of an object detection dedicated system that minimizes energy consumption and maximizes performance with reduced hardware size and cost. The deployment of a real-time FPGA-based general-purpose object detector is a major and current challenge. This detector will be accelerated using the Deep Versat CGRA architecture~\cite{valter:deep_versat}, which was developed at the INESC-ID Research Institute.
+
+Most FPGA-based object detectors in previous works use development boards. Some systems~\citep{long:fpga_demo, bochem:fpga_demo} receive images from a camera using specialized protocols and transfer their results (i.e., detections) to a host PC through well known interfaces such as UART or Ethernet. Other works install an operating system in the board to harness the integration of the input camera and the output video streaming~\cite{llorente:fpga_demo}.
+>>>>>>> 69e43af3d375f9039aaeb0b9750de9dd40718dde
+
+Another motivation behind this work is to develop a generic infrastructure where different FPGA-based object detectors can be tested. This platform should be capable of receiving images from a camera and displaying the resulting images through an appropriate video interface for demonstrations in development boards, without requiring external hardware or additional software.  
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Objectives}
+\label{section:objectives}
+
+The training of DNNs is typically performed on cloud servers where there are no strict limitations in terms of energy consumption, computational power and memory capacity~\cite{sze:dnn_survey}. On the other hand, the inference is desired in embedded systems near the sensor to reduce communication latency and security risks. 
+
+Thus, the main objective of this report is to propose a methodology for deploying a real-time FPGA-based general-purpose object detector, over a generic infrastructure, using a pre-trained DNN. This implies studying the state-of-art object detectors, besides understanding how DNNs are deployed in FPGAs and CGRAs. A brief description about the Deep Versat CRGA architecture is also considered.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Report Outline}
+\label{section:outline}
+
+This report is organized as follows. Chapter 2 introduces DNNs and shows how they have been implemented in FPGAs. In chapter 3, the current state-of-art for object detection is analyzed. Based on that analysis, one object detector is selected and fully described. Chapter 4 introduces the concept of CGRA and explains the Deep Versat CGRA architecture. Chapter 5 presents the proposed methodology and the expected work-plan/results.

@@ -1,0 +1,107 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                      %
+%     File: Thesis_Introduction.tex                                    %
+%     Tex Master: Thesis.tex                                           %
+%                                                                      %
+%     Author: Andre C. Marta                                           %
+%     Last modified :  2 Jul 2015                                      %
+%                                                                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Introduction}
+\label{chapter:introduction}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Topic Overview}
+\label{section:overview}
+
+In 1977, with the growing popularity of audio interfaces, the Audio Engineering
+Society (AES) founded the AES Digital Audio Standards Committee, creating some of
+the most used audio standards to this day. One of the most popular standards, the
+AES3 digital audio interface, is stil used in current audio equipment, like
+microphones and speakers with XLR connectors.
+
+Since then, there has been a significant rise in AES standards, most of them
+demanding the conversion of an audio signal's sample rate. One of the classical
+examples is the the conversion from CD quality with a sampling rate $F_s = 44.1 kHz$
+to DVD quality with $F_s = 48 kHz$. By consequence, there is a great demand for
+sample rate converters, both in the form of software algorithms and hardware
+designs.
+
+To answer this need, some integrated circuit manufacturers developed multiple
+sample rate converters with varied specifications. The AD1896~\cite{ad1896}, for
+instance, is an asynchronous sample rate converter made by Analog Devices, in
+2003. It supports a stereo (2 channel) audio signal and converts its sampling
+rate from 7.75:1 to 1:8 ratios. Another example is the SRC4194~\cite{src4194},
+manufactured by Texas Instruments since 2004, supporting up to 4 channel inputs,
+and a wider sampling rate ratio, ranging from 16:1 to 1:16 ratios. The first
+Intelectual Property (IP) was developed by Coreworks and called the CWda52~\cite{cwda52},
+a multi-channel sample rate converter, able to convert sampling
+rates using ratios from 8:1 to 1:8.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Motivation}
+\label{section:motivation}
+
+While there are currently hardware implementations of asynchronous sample rate
+converters, most of them are integrated in a circuit (IC), while implementations
+as intelectual property (IP) are few and have limited specifications compared to
+their IC counterpart. This makes it difficult for some companies that
+manufacture devices like television sets to integrate a cheaper sample rate
+converter which fulfills the specifications of the respective chipsets.
+
+The overall growth of the market for embedded audio systems which require the
+sample rate conversion function motivates the development of better sample rate
+converter IP cores, as a cheaper and more versatile alternative to discrete
+solutions.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Objectives}
+\label{section:objectives}
+
+The main objective of this work is to design an asynchronous sample rate
+converter (ASRC) IP core using the Verilog hardware description language. This
+converter should support any input or output signal, sampled from
+\SI{8}{\kilo\hertz} to \SI{192}{\kilo\hertz}, with up to 24-bit samples. To
+ensure high audio quality, the sample rate converter should ensure a total
+harmonic distortion plus noise ratio (THD+N) of -130 dB or less. It should
+also support multi-channel signals, with a channel limit that depends
+on the computation time restraints.
+
+The ASRC should be tested in simulation and field programmable array logic
+(FPGA) boards, using a PC to send and receive audio signals via Ethernet to the
+FPGA board; the audio signals originate from .wav files, and the result of
+sample rate conversion is stored back in another .wav file.
+
+At the initial stages of this work some of the most used sample rates will be
+tested while the input sample rate is kept constant. Later, dynamically varying
+input sample rates will be tested. The work requires the study of digital signal
+processing techniques, with emphasis on digital signal filtering and
+interpolation techniques.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Author's Work}
+\label{section:work}
+
+Part of the work reported here was done in a summer internship at IObundle. At
+the beginning of the internship, a non-functional Verilog prototype was already
+available, as well as an Octave model detailing the structure of the ASRC. This
+made it possible not only to gain knowledge of the dataflow of the sample rate
+conversion algorithm, but also to have a starting point for developing of the
+system. The work was focused on the reduction of the output signal's THD+N and
+optimization of the measurement of input and output sample rates for overall
+synchronization.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Report Outline}
+\label{section:outline}
+
+This report is composed of 4 more chapters. In the second chapter, the sample
+rate conversion algorithm will be generically explained and some sample rate
+converter designs will be presented, along with their advantages and
+disadvantages. In the third chapter, a hardware implementation is proposed,
+containing the architecture of the core along with its interfaces and
+submodules. In the fourth chapter, the process of simulation and implementation
+of the core is described and some preliminary results are presented. In the
+fifth and final chapter, some conclusions of the research needed for this thesis
+are drawn, and an outline of the work that still needs to be done is defined.

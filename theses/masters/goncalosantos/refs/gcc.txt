@@ -1,0 +1,4 @@
+gcc cross compiler to dump RTL file: -fdump-final-insns
+https://gcc.gnu.org/onlinedocs/gcc-2.95.3/gcc_15.html
+https://gcc.gnu.org/onlinedocs/gccint/RTL.html
+https://gcc.gnu.org/onlinedocs/gccint/Tree-SSA.html

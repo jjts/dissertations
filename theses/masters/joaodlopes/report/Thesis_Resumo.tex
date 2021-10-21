@@ -1,0 +1,46 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                      %
+%     File: Thesis_Resumo.tex                                          %
+%     Tex Master: Thesis.tex                                           %
+%                                                                      %
+%     Author: João D. Lopes                                            %
+%     Last modified :  15 October 2017                                 %
+%                                                                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Resumo}
+
+% Add entry in the table of contents as section
+\addcontentsline{toc}{section}{Resumo}
+
+Esta tese descreve o Versat, um acelerador de hardware reconfigurável
+para sistemas embebidos. O Versat é uma arquitetura de matriz
+reconfigurável de grão grosso e de baixa potência, que implementa
+reconfiguração auto-gerada e parcial usando um controlador. Esta
+abordagem visa aplicações de muito baixo consumo energético, como as
+encontradas em redes de sensores sem fios, onde o uso de GPUs ou FPGAs
+está fora de questão. Comparado com outras arquitecturas, o Versat
+possui um baixo número de unidades funcionais interligadas em
+topologia de grafo completo. O número de unidades funcionais é
+compensado pela facilidade de configuração e reconfiguração. Ao
+contrário de outras arquitecturas, o Versat pode mapear sequências de
+malhas aninhadas em vez de uma única malha; a reconfiguração
+auto-gerada e parcial ocorre entre malhas aninhadas. O Versat pode ser
+programado em assembly ou em C++. A programação em assembly é uma
+característica útil para optimização de programas e contorno de erros
+de compilação/arquitetura. Este trabalho contribuiu para o projecto de
+todo o sistema, com especial ênfase nas fases de verificação,
+depuração, restrições temporais, concorrência ao nível de circuito de
+dados, acesso directo à memória, interfaces AXI, programas para
+caracterização e testes de regressão. Resultados de caracterização
+mostram que o Versat pode acelerar algoritmos de configuração única
+até 4x com um consumo energético uma ordem de grandeza inferior
+comparado com um processador de referência. No caso de algoritmos com
+múltiplas configurações, os benefícios são ainda maiores: aceleração
+de 20x com até 2 ordens de grandeza de mais eficiência energética.
+
+\vfill
+
+\textbf{\Large Palavras-chave:} Computação reconfigur{\'a}vel, Matrizes Reconfigur{\'a}veis de Gr{\~a}o Grosso, Sistemas Embebidos, Sistemas de Baixa Pot{\^e}ncia
+
+

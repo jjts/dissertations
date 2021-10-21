@@ -1,0 +1,40 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                      %
+%     File: Thesis_Abstract.tex                                        %
+%     Tex Master: Thesis.tex                                           %
+%                                                                      %
+%     Author: Andre C. Marta                                           %
+%     Last modified :  2 Jul 2015                                      %
+%                                                                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Abstract}
+
+% Add entry in the table of contents as section
+\addcontentsline{toc}{section}{Abstract}
+
+Currently, in digital audio processing, sampling rate convertions
+are common. While there solutions for this problem is the form of
+software and integrated circuit implementations, there is no viable
+solution in the form of intellectual property, existing only one
+(limited) solution.
+
+A sample rate converter can be structured as: (1) an interpolation
+module, (2) a reconstruction and anti-aliasing filter
+(fractional delay filter), and (3) a decimation module.
+This structure can be optimized by joining these modules,
+avoiding computation of decimated samples.
+The two main concerns of this design are the design of the
+fractional delay filter, and the synchronization mechanisms
+used to guarantee that the filter is adjusted with changes
+on the conversion ratio.
+
+The focus of this report is on the study of asynchronous sampling rate
+converter designs, as well as the digital signal processing
+techniques used in the current state-of-the-art. This
+study leads to a proposed design of a prototype multi-channel
+asynchronous sampling rate converter.
+
+\vfill
+
+\textbf{\Large Keywords:Asynchronous Sample Rate Converter, Digital Signal Processing, FPGA, Fractional Delay Filter} 

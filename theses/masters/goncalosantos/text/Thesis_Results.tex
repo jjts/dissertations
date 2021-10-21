@@ -1,0 +1,551 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                      %
+%     File: Thesis_Results.tex                                         %
+%     Tex Master: Thesis.tex                                           %
+%                                                                      %
+%     Author: Gonçalo Santos                                           %
+%     Last modified : 20 Oct 2018                                      %
+%                                                                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Results}
+\label{chapter:results}
+
+The aim of this work is to produce a workable {\bf C} language
+compiler for the {\it Versat} architecture using the {\it picoVersat}
+instruction set.
+The success can be measured by the number of {\bf C} language
+constructs that are working properly.
+Consequently, testing is of primordial importance, as are the range
+of tests used to exercise the compiler.
+
+\section{Functionality}
+
+The compiler, as far the tests were comprehensive,
+supports all {\bf C} language integer constructs.
+Limitations are listed below.
+
+Since the processor instruction set is reduced, as are the
+number of {\bf lcc} terminals to be implemented by the compiler,
+the testing of each operation, on its own, is strait
+forward.
+Testing sequences of such operations may prove more
+difficult to test, since different {\bf C} programs
+can produce different selection matches.
+
+\section{Testing}
+
+In the test of a compiler, where a small change can affect the
+generation of multiple instructions, a good set of
+regressive tests is very important.
+In order to automate the process, a {\tt test/} directory
+was setup.
+This directory includes a set of {\bf .c} test files and
+the expected output {\bf .out}.
+
+The {\tt Makefile} compiles, executes and compares the new
+result with the previously stored result.
+All differences in output are printed and can then be analyzed.
+
+Since the output from {\bf iverilog} includes the number
+of clocks spent, it is easy to compare whether the changes in the
+compiler result in improvements, or in performance degradation.
+
+Some tests are very simple and its output can be easily predicted.
+To make testing even simpler, the return value of the {\tt main}
+routine is printed, unless the {\sc NORET} environment variables
+is defined. Upon return from the {\tt main} routine, the lowest
+nibble is printed as an {\sc ASCII} starting at $0$.
+This means that values between $10$ and $15$ are printed as
+the {\sc ASCII} character at the respective offset, namely the
+sequence: \verb|:|, \verb|;|, \verb|<|, \verb|=|, \verb|>|, \verb|?|.
+
+More complex tests can be compiled with {\bf gcc} and executed
+to access the expected output.
+This, however, can not be performed if the examples include
+{\tt asm} calls, since the code can only be executed by the
+{\it Versat}, or by the {\bf iverilog} simulator, and not by the
+native testbench processor.
+%vdb.c
+
+A set of $86$ regression tests is currently being used, ranging
+from specific operator testing to complex recursive and iterative
+examples. % And the number of tests keeps growing ...
+
+\section{Limitations}\label{limitations}
+
+The {\bf C} language imposes that {\tt sizeof(char)==1}
+as does the {\bf lcc} compiler (see~\cite[p.79]{hanson95}).
+This works fine as far as {\tt sizeof(char)} can be 32-bits.
+However, additionally, the {\bf lcc} assumes through out
+the code that $8$ is the number of {\em bit-per-byte}.
+If it was a variable, one could set it to $32$.
+As it is hardcoded, all address literals
+will be truncated to 8-bits ({\tt 8}${}^{\wedge}${\tt ty->size}).
+\begin{verbatim}
+int *addr = (int*)0x123456;
+\end{verbatim}
+This can be avoided by setting an integer to the
+required value and then assigning it to a pointer.
+This works since integer literals are 32-bit wide
+and the conversion to pointer, controlled by the
+{\it back-end}, does not truncate the value.
+\begin{verbatim}
+int *addr, value = 0x123456;
+addr = (int*)value;
+\end{verbatim}
+Nevertheless, defining literal pointer is never
+a good predictive in virtual memory machines.
+In {\it Versat} it is useful to map variables
+to specific addresses.
+
+Due to the same reason, a warning message is issued
+({\tt shifting an `int' by 12 bits is undefined})
+but the code is correctly generated.
+
+% #define LONG_MIN -2147483648
+% warning: unsigned operand of unary -
+% but 0x80000000 or bellow is OK!
+% #  define LONG_MAX	2147483647
+% #  define LONG_MIN	(-LONG_MAX - 1L)
+
+In the initial version of {\it picoVersat}, all global
+data must be added by {\tt MEM\_BASE=512}.
+Since this is performed when addresses are fetched,
+static assignments store the unadded value.
+Therefore, all accesses must be added by $512$.
+Must add {\tt 512} to global pointers in {\tt picoversat-0.0}
+\begin{verbatim}
+int mem[10], *base = mem;
+int main() { base[6+512] = 9; return return mem[6]; }
+\end{verbatim}
+This can be avoided if assignment is performed during
+execution (not at compile time), even if the variable
+is global.
+\begin{verbatim}
+int mem[10];
+int main() { int *base = mem; base[6] = 9; return return mem[6]; }
+\end{verbatim}
+
+Signed multiplication, division and modulus ({\tt \_mul},
+{\tt \_div} and {\tt \_mod}) do not generate carry since
+the flags register of {\it picoVersat} is read-only.
+
+The {\bf C} programming languages relies on separate
+compilation, where several files are independently
+compiled and then linked together.
+However, there is no linker in the {\it Versat} system
+and the assembler {\bf va} does not support multiple
+files.
+The solution is to perform linking with {\bf cpp} %%%
+include directives.
+While in normal {\bf C} the {\tt .c} should be
+included, rather compiled, the inclusion of {\bf .h}
+as well as {\bf .c} accomplishes the desired result.
+Since there is no linking, only multiple inclusion
+of files must be avoided.
+
+The {\it Versat} architecture is meant to be used offline
+and no form of argument passing to the {\tt main} routine
+is available.
+Consequently, the stack is initialized at the top.
+Therefor, even if the program declares arguments to
+the {\tt main} routine ({\tt argc, argv, envp}) they should
+never be accessed.
+Also, since the system has no memory management unit,
+all illegal accesses are silently ignored by the system.
+Highly recursive routines that exhaust the stack will have
+unpredictable behaviors, since they will begin to overwrite
+the top of the code.
+Even if it is not the compilers responsibility, it something
+that the programmer should be aware, especially when
+transitioning from a virtual managed memory system.
+
+Finally, the compiler does not support floating point
+data types, since every operation must be supported
+by library routines.
+This is the case for many android devices, namely
+smartphones.
+However, the {\it Versat} purpose is to perform
+integer arithmetic operations fast and is not aimed at
+scientific programming.
+The error message {\tt compiler error in \_label--Bad terminal}
+is issued by the compiler when it cannot handle a given operation,
+namely floating point operations.
+
+\section{Register assignment}
+
+Register assignment in compiler design considers two types of registers:
+global registers that hold variable values and scratch registers that hold
+temporary values.
+The {\bf lcc} compiler defines these registers by setting a mask for each
+type of register.
+It is up to each {\it back-end} to define the mask values according to processor
+capabilities.
+For instance, the {\bf sparc} processor defines $4$ sets of $8$ registers:
+global, temporary, input and output; where the later two sets replace
+the stack for argument passing.
+In {\bf i386} all $7$ registers are temporary, while {\bf mips} uses half
+for each purpose ($16+16$).
+
+Since the {\it picoVersat} has no specific register assignment, a study
+was carried out in order to assess the best balance between global and
+scratch registers.
+Registers {\tt R0} and {\tt R13} to {\tt R15} are used to communicate with {\it Versat}
+and are invisible to the compiler.
+The stack is controlled by a {\it stack pointer} ({\tt R12}) and a {\it frame pointer}
+({\tt R11}).
+The remaining registers ({\tt R1} to {\tt R10}) compose a mask {\tt 7FE}, where
+the lowest bit ({\tt R0}) is omitted for register assignment, and the highest
+used bit {\tt 400} is {\tt R10}.
+The register {\tt R1} is used to return function values and all arguments are
+passed on the stack.
+At least two registers must be used as scratch for binary operations
+temporaries.
+The compiler allows the definition of a {\tt tmask} for temporaries and a
+{\tt vmask} for variables.
+
+Initially, in run $1$, the experiment uses all registers for temporaries.
+Each run adds a variable register at the expense of a temporary, until only
+two temporaries remain (run $9$).
+Three examples where used: {\tt assign}, {\tt repeating locals} and
+{\tt bubble sort}.
+The first two represent opposite extremes of register usage, while the last is
+a more balanced and realistic example.
+
+The first example uses the {\bf C} language right associative {\it assign} operator
+where each new assignment to the variable {\tt a} requires a new temporary register.
+%(see Figure~\ref{fig:assign}).
+
+%\begin{figure}
+\begin{verbatim}
+int f() { return 1; }
+int main()
+{
+  int a;
+
+  a = f() + (a =
+      f() + (a =
+      f() + (a =
+      f() + (a =
+      f() + (a =
+      f() + (a =
+      f() + (a =
+      f() + (a =
+      f() + (a =
+      f() + (a =
+      f() + (a =
+      f() + (a =
+      f() + (a = 1
+                  )))))))))))));
+  return a;
+}
+\end{verbatim}
+%\caption{}
+%\end{figure}
+
+The register usage shows that each assign uses a register $4$ times at
+the expense of the return register {\tt R1}.
+The best solution, represented by the lowest clock count,
+is to use only two temporaries, since more variables imply more stack ({\tt R12}),
+saves and restores between each call to the function {\bf f}.
+
+%\begin{table}
+\begin{center}
+{\small
+\begin{tabular}{r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r}
+run&vars&vmask&tmask&R1&R2&R3&R4&R5&R6&R7&R8&R9&R10&R11&R12&clks\\\hline
+1&0&000&7FE&21&4&4&4&4&4&4&4&6&44&27&82&677\\
+2&1&400&3FE&23&4&4&4&4&4&4&6&42&17&14&82&638\\
+3&2&600&1FE&25&4&4&4&4&4&6&42&0&17&16&77&633\\
+4&3&700&0FE&27&4&4&4&4&6&42&0&0&17&18&72&628\\
+5&4&780&07E&29&4&4&4&6&42&0&0&0&17&20&67&623\\
+6&5&7C0&03E&31&4&4&6&42&0&0&0&0&17&22&62&618\\
+7&6&7E0&01E&33&4&6&42&0&0&0&0&0&17&24&57&613\\
+8&7&7F0&00E&35&6&42&0&0&0&0&0&0&17&26&52&608\\
+9&8&7F8&006&39&42&0&0&0&0&0&0&0&17&28&47&603\\
+\end{tabular}
+}
+\end{center}
+%\caption{}
+%\end{table}
+\vspace*{5mm}
+
+The second example uses lots of repeating local variables so that each one is assigned
+a register, for its uses from the first to last line, if one is available.
+%(see Figure~\ref{fig:locals}).
+
+%\begin{figure}
+\begin{verbatim}
+int func(int a, int b, int c, int d, int e, int f, int g, int h, int i, int j, int k) {
+    a = a + b - c - d - e + f - g + h + i + j + k;
+    b = a - b + c + d - e - f + g - h + i - j - k;
+    c = a + b - c - d + e + f + g - h + i + j - k;
+    d = a - b - c + d - e + f - g + h - i - j - k;
+    e = a + b + c - d - e - f - g + h - i + j - k;
+    f = a - b - c + d - e + f + g - h - i - j + k;
+    g = a + b - c - d + e + f + g - h + i + j - k;
+    h = a - b + c + d - e - f - g + h + i - j - k;
+    i = a + b - c - d - e + f + g + h + i + j - k;
+    j = a - b - c + d - e + f + g - h - i - j - k;
+    k = a + b + c - d + e - f - g - h - i + j + k;
+    return a + b + c + d + e + f - g + h - i + j - k;
+}
+
+int main() {
+    return func(10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0);
+}
+\end{verbatim}
+%\caption{}
+%\end{figure}
+
+As expected, the best solution is to use highest of temporaries in order
+to reduce frame pointer ({\tt R11}) accesses to stack saved values.
+
+%\begin{table}
+\begin{center}
+{\small
+\begin{tabular}{r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r}
+run&vars&vmask&tmask&R1&R2&R3&R4&R5&R6&R7&R8&R9&R10&R11&R12&clks\\\hline
+1&0&000&7FE&45&27&12&13&48&46&40&45&54&62&68&56&956\\
+2&1&400&3FE&53&31&13&54&46&40&47&54&62&0&78&51&1001\\
+3&2&600&1FE&61&35&52&46&48&49&56&62&0&0&89&46&1051\\
+4&3&700&0FE&89&39&59&63&51&56&62&0&0&0&101&41&1106\\
+5&4&780&07E&109&43&75&49&74&79&0&0&0&0&113&36&1161\\
+6&5&7C0&03E&146&45&84&58&105&0&0&0&0&0&124&31&1211\\
+7&6&7E0&01E&156&88&112&94&0&0&0&0&0&0&138&26&1278\\
+8&7&7F0&00E&171&117&176&0&0&0&0&0&0&0&154&21&1356\\
+9&8&7F8&006&231&249&0&0&0&0&0&0&0&0&172&16&1447\\
+\end{tabular}
+}
+\end{center}
+%\caption{}
+%\end{table}
+\vspace*{5mm}
+
+The last example, the {\it bubble sort}, uses a mixture temporaries and variable
+reuses. %(see Figure~\ref{fig:bubble}).
+
+%\begin{figure}
+\begin{verbatim}
+#include "printi.h"
+
+int bubble(int list[], int n) {
+    int c, d, t, swap, cnt = 0;
+
+    for (c = 0; c < n - 1; c++) {
+        for (swap = 0, d = n - 1; d > c; d--)
+            if (list[d - 1] > list[d]) {    /* Swapping */
+                swap++;
+                t = list[d];
+                list[d] = list[d - 1];
+                list[d - 1] = t;
+            }
+        if (!swap)
+            break;
+        cnt++;
+    }
+    return cnt;
+}
+
+int v[] = { 7, 4, 9, 6, 2, 1, 3, 5, 8, 0 };
+
+int main() {
+    int i, size = sizeof(v) / sizeof(v[0]), cnt = bubble(v, size);
+    for (i = 0; i < size; i++) {
+        putchar(v[i] + '0');
+        putchar(' ');
+    }
+    printi(cnt, 10);
+    putchar('\n');
+    return 0;
+}
+\end{verbatim}
+%\caption{}
+%\end{figure}
+
+This example exploits the tradeoff between global and temporary register
+usage.
+In the first runs the compiler is unable to use all temporaries.
+In the last runs some variable registers are left unassigned and the number
+of required execution clocks rises again.
+
+%\begin{table}
+\begin{center}
+{\small
+\begin{tabular}{r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r}
+run&vars&vmask&tmask&R1&R2&R3&R4&R5&R6&R7&R8&R9&R10&R11&R12&clks\\\hline
+1&0&000&7FE&2&0&0&0&0&4&5&15&30&45&31&36&9855\\
+2&1&400&3FE&2&0&0&0&0&4&7&29&41&11&24&36&8193\\
+3&2&600&1FE&2&0&0&0&4&5&27&37&7&11&19&41&7714\\
+4&3&700&0FE&2&0&0&0&5&25&37&4&7&11&17&41&7399\\
+5&4&780&07E&2&0&0&5&19&37&6&4&7&11&13&46&7022\\
+6&5&7C0&03E&2&0&5&19&33&6&6&4&7&11&9&49&6949\\
+7&6&7E0&01E&2&5&19&33&0&6&6&4&7&11&9&49&6949\\
+8&7&7F0&00E&5&19&33&0&0&6&6&4&7&11&9&44&6921\\
+9&8&7F8&006&21&28&0&0&0&6&6&4&7&11&13&41&7492\\
+\end{tabular}
+}
+\end{center}
+%\caption{}
+%\end{table}
+\vspace*{5mm}
+
+Based on experience with the examples above, a balanced approach should work best
+in most cases.
+Therefor, the first five registers, {\tt R1} to {\tt R5}, are used as temporaries
+({\tt tmask=0x003E}) and the remaining five, {\tt R6} to {\tt R10}, are used as
+variables ({\tt vmask=0x07C0}).
+
+\section{Efficiency considerations}
+
+Calls are very expensive operations for any processor.
+{\it Intel Inc.} has made a significant effort over the year to address this
+problem.
+In the last years, its high end processors provide faster {\it calls} than
+{\it jumps} at the expense of higher transistor count. %ref!
+In a processor like {\it picoVersat}, the problem is magnified since
+no stack specific registers or opcodes are available.
+
+A function call in the {\bf C} programming language requires:
+\begin{enumerate} \itemsep0em 
+\item {\bf argument passing} by pushing values to the stack;
+\item {\bf calling} the desired routine;
+\item {\bf saving used registers} before the routine destroys its values;
+\item {\bf frame pointer} saving to access arguments and locals;
+\item {\bf allocate space} for local variables;
+\item actually performing the routine operations;
+\item {\bf restoring frame pointer} of the previous routine;
+\item {\bf restoring used registers} previous values;
+\item {\bf returning} to the calling routine;
+\item {\bf removing arguments} from stack.
+\end{enumerate}
+The present compiler detects when a routine accesses no arguments or locals
+and does not emit frame pointer code. So, if a routine only uses global
+variables, the call becomes a bit more efficient.
+Some of the tests used become upto 5\% faster by removing the frame
+pointer in routines where it not needed.
+
+As any routine can be called many times, even recursively, the compiler
+must save, at the beginning, and restore, at the end,
+all the registers the routine uses.
+This means that, at the start of the program, the {\tt main} routine will spill
+all registers it will use, although they have no defined value.
+Such procedure is required since the routine may be recursively called.
+However, in most cases, the {\tt main} routine is only invoked once, at
+the start of the program.
+The {\sc NOSAV} environment variable can be set if the {\tt main}
+routine is not used recursively and no registers will saved by the compiler.
+This special hack can be dangerous to use, but it makes {\tt main} based
+programs more efficient.
+
+The {\it picoVersat} controls {\it Versat} by setting specific values to
+predefined memory positions.
+The use of a routine to perform such a task is a very
+expensive way to change memory positions, either through {\tt asm}
+directives or standard {\bf C} code, as the tests {\tt set.c} and
+{\tt setvar.c} show, respectively.
+Memory values can be efficiently changed by assigning to a pointer
+{\tt *addr=val} (see Limitations, above).
+
+During this work, the {\it picoVersat} evolved. The use of a single
+memory, for program code and data, removed the need for a {\tt addi MEM\_BASE}
+instruction for each variable load and store, resulting in a 5\% improvement
+over all the regression test in use, at the time. % 17022/16213 pico-0
+
+Finally, the compiler some times generates a register read after the
+same register was written by another instruction selection.
+At least, the read can be suppressed, but {\bf lcc} provides no
+peephole optimizer for final code cleanup.
+
+\section{Compiler instalation}
+
+The compiler itself, {\bf lcc}, can be invoqued directly with the
+{\tt -target=versat} option, as long as the input file has already
+been preprocessed ({\bf cpp}).
+The compiler output is a {\it picoVersat} assembly, that can then
+fed to the {\it versat} assembler ({\bf va}).
+
+However, the complete compilation process, from {\bf C} language
+source file to {\bf iverilog} simulation executable, can be
+integrated as in a standard high-level compiler.
+
+Section~\ref{app:integ} describes the requirements for such an integration.
+The compiler {\tt Makefile}s, in the main and {\tt versat/} directories,
+can be used to provide the instalation of all required files
+for a complete development environment.
+By default, without any changes to the {\tt Makefile}s, the
+compiler development environment is placed under the
+{\tt /usr/local/versat} directory.
+
+The default directories for the compiler installation
+({\tt make install}) are predefined as
+{\tt /usr/local/versat/lcc} for the compiler files
+({\tt lcc}, {\tt cpp}, {\tt rcc}, {\tt va}, and
+{\tt xdict.json}), and can be redefined at compile
+time or using the {\sc LCCDIR} environment variable
+at runtime. The {\it picoVersat} {\tt rtl/} files
+({\tt include/}, {\tt src/}, and {\tt testbench/})
+should be copied to {\tt /usr/local/versat/pico}
+(defined at compile time).
+Also the {\bf iverilog} compiler is defined at
+compile time as residing in {\tt /usr/local/bin/}.
+
+The structure of the installed files,
+in the current version is:
+\begin{Verbatim}[baselinestretch=1.0]
+/usr/local/versat/lcc/lcc
+/usr/local/versat/lcc/cpp
+/usr/local/versat/lcc/rcc
+/usr/local/versat/lcc/va
+/usr/local/versat/lcc/xdict.json
+/usr/local/versat/lcc/include/strlen.h
+/usr/local/versat/lcc/include/umod.h
+/usr/local/versat/lcc/include/errno.h
+/usr/local/versat/lcc/include/malloc.h
+/usr/local/versat/lcc/include/umul.h
+/usr/local/versat/lcc/include/itoa.h
+/usr/local/versat/lcc/include/Makefile
+/usr/local/versat/lcc/include/stdarg.h
+/usr/local/versat/lcc/include/mem_ends.h
+/usr/local/versat/lcc/include/xdict.h
+/usr/local/versat/lcc/include/atoi.h
+/usr/local/versat/lcc/include/puts.h
+/usr/local/versat/lcc/include/dma.h
+/usr/local/versat/lcc/include/versat.h
+/usr/local/versat/lcc/include/ends.h
+/usr/local/versat/lcc/include/mul.h
+/usr/local/versat/lcc/include/xdictinc
+/usr/local/versat/lcc/include/div.h
+/usr/local/versat/lcc/include/ends.cbc
+/usr/local/versat/lcc/include/udiv.h
+/usr/local/versat/lcc/include/printf.h
+/usr/local/versat/lcc/include/mod.h
+/usr/local/versat/lcc/include/alloca.h
+/usr/local/versat/lcc/include/printi.h
+/usr/local/versat/lcc/include/gnuc.h
+/usr/local/versat/lcc/include/putchar.h
+/usr/local/versat/lcc/include/assign.h
+/usr/local/versat/pico/testbench/sim_xtop.cpp
+/usr/local/versat/pico/testbench/xtop_tb.v
+/usr/local/versat/pico/include/xdefs.vh
+/usr/local/versat/pico/src/xaddr_decoder.v
+/usr/local/versat/pico/src/xctrl.v
+/usr/local/versat/pico/src/xram.v
+/usr/local/versat/pico/src/xregf.v
+/usr/local/versat/pico/src/xcprint.v
+/usr/local/versat/pico/src/xtop.v
+\end{Verbatim}
+
+After adding the {\tt /usr/local/versat/lcc} directory to
+the {\sc PATH} environment variable, an executable example
+can be produced with the command:\\
+{\tt lcc example.c -o example}
+
+The example can then be run with:\\
+{\tt ./example}
+
+Please note that the {\it versat} memory dump {\tt .hex}
+file is stored in the {\tt /tmp} directory.
+
+\cleardoublepage

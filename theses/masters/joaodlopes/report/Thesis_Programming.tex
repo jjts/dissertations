@@ -1,0 +1,203 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                      %
+%     File: Thesis_Programming.tex                                     %
+%     Tex Master: Thesis.tex                                           %
+%                                                                      %
+%     Author: João D. Lopes                                            %
+%     Last modified :  20 September 2017                               %
+%                                                                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Programming}
+\label{chapter:programming}
+
+Versat can be programmed using a C/C++ subset, and the code can be
+compiled using the Versat compiler~\cite{Santiago2016}. Versat can
+also be programmed in assembly language, given its easy to apprehend
+structure. To the best of our knowledge, Versat is the only CGRA that
+can be programmed in assembly. In this chapter, Versat programming is
+illustrated using its C/C++ dialect, which is easier for explaining
+the basic concepts. Also it will be explaind how to use Versat drivers
+from the host system point of view (where the host system is an
+embedded processor, for instance an ARM processor).
+
+%The programming tools will not be explained as they are not the main focus of this report.
+
+% ----------------------------------------------------------------------
+\section{Basic programming}
+\label{section:basicProgramming}
+
+In order to outline the basics of Versat programming, a typical
+example program is given in this section. The program adds two memory
+interleaved vectors: one vector resides in the even addresses while
+the other vector resides in the odd addresses. The program is shown in
+figure~\ref{fig_vec_add} and comments are added for clarity.
+
+\begin{figure}[!htb]
+\centering \includegraphics[width=0.8\textwidth]{drawings/code.pdf}
+\caption{Vector addition code.}
+\label{fig_vec_add}
+\end{figure}
+
+The program starts in the {\tt main()} function, as is usual in C/C++
+programs, and proceeds immediately to loading Versat with data using
+the DMA. The DMA is configured ({\tt dma.config()}) with the external
+and internal addresses, transfer size and direction. The {\tt
+  dma.run()} function sets the DMA running, but does not wait for its
+completion.
+
+With the DMA running, the program proceeds to configure the DE. The
+configuration register file is cleared in order to start a new
+configuration ({\tt de.clearConfig()}). Certain language constructs
+are interpreted as DE configurations and the compiler automatically
+generates instructions that write these configurations to the CM. This
+is the case of the ensuing {\tt for} loop. The fact that memory ports
+are invoked in its body triggers this interpretation. Note that object
+or variable declarations are not yet supported by the compiler. Data
+must be referenced using the names of the memories or registers where
+they are stored. When variables are supported, the issue of
+recognizing DE configurations will need further research. For now, it
+can be conjectured that the presence of data arrays in a loop is
+sufficient for inferring a DE configuration. In the given example, the
+expression in the loop body configures the DE to read the two vectors
+from the two ports of memory 0, add their elements and place the
+result in memory 1 using its port A.
+
+Next, the program checks whether the DMA has finished loading the
+data. The {\tt dma.wait()} function blocks the Controller until the
+DMA is idle again. Note that the DMA has been running concurrently
+with the Controller, which has been configuring the DE.
+
+Once the DE is loaded and configured, it is run by means of the {\tt
+  de.run()} function call. While it runs, the DMA is configured in
+advance to transfer the result of the vector addition to the external
+memory. Then the program waits for DE completion ({\tt de.wait()}) and
+runs the DMA ({\tt dma.run()}). It is necessary to wait for DMA
+completion ({\tt dma.wait()}) before exiting the program, to guarantee
+that the result is stored in the external memory before control is
+passed to a host processor.
+
+% ----------------------------------------------------------------------
+\section{Self and partial reconfiguration}
+\label{section:selfPartialReconfiguration}
+
+In this section, an example is presented to illustrate {\em
+  self-generated partial reconfiguration} in Versat
+(figure~\ref{fig_preconf}). The example shows a {\tt do-while}
+loop. These kind of loops are always executed by the Controller,
+because the DE has no means to stop conditionally.
+
+\begin{figure}[!htb]
+\centering \includegraphics[width=0.8\textwidth]{drawings/code2.pdf}
+\caption{Self and partial reconfiguration code.}
+\label{fig_preconf}
+\end{figure}
+
+A 2-level nested loop follows, where the body contains only
+expressions involving memory ports. This nested loop is therefore
+interpreted as a DE configuration and the compiler generates
+instructions that write this configuration to the CM. Note that the
+memory address expressions (between square brackets) use register R1,
+which is updated inside the {\tt do-while} loop: R1 depends on R7
+which is also updated in the loop.
+
+In fact, R1 is the start address for the data in memories 0 and 1,
+which corresponds to the Start parameter of the AGUs in the memory
+ports used (see Table~\ref{tab:MemParameter}). Thus, only the Start
+parameters in these AGUs need to be reconfigured, which means the DE
+is {\em partially reconfigured} in each iteration of the {\tt
+  do-while} loop.
+
+Furthermore, the {\tt do-while} loop is {\em generating} one DE
+configuration per iteration. Since this is done by the Controller,
+without any intervention of the host processor, it may be said that
+{\em Versat is self-reconfigurable}.
+
+The {\tt de.wait()} function call, after the nested loop, waits for
+the previous DE configuration to finish running. The following {\tt
+  de.run()} function call runs the DE again for the current
+configuration. While the DE is running, registers R7 and R12 are
+updated and the {\tt do-while} loop goes on to the next iteration,
+provided the loop control register (R12) is non-zero. In the next
+iteration R1 is updated, the DE is partially reconfigured for the next
+run, and the process repeats all over again.
+
+% ----------------------------------------------------------------------
+\section{Versat Driver}
+\label{section:drivers}
+
+Versat is designed to work as a co-processor for host systems. The
+host system needs a very simple driver, which consists of only a few
+functions for managing Versat. A program that uses the Versat driver
+as is shown in the figure~\ref{fig_drivers}.
+
+\begin{figure}[!htb]
+\centering \includegraphics[width=0.8\textwidth]{drawings/drivers.pdf}
+\caption{C code using Versat drivers.}
+\label{fig_drivers}
+\end{figure}
+
+The reduced number of functions present in the driver make Versat very
+easy to use by host processors. This is mainly because Versat is very
+independent, it can reconfigure itself, access data from the external
+memory and run simple control algorithms. However, Versat needs to be
+programmed separately.
+
+To use the driver, first of all, the header file ({\tt versat.h}) must
+be included in the source file of the host program willing to use
+Versat as an accelerator.
+
+Second, the {\tt versat\_load()} function is called to load Versat
+kernel(s) into Versat's program memory. Parameter {\tt progExt\_addr}
+is the external memory address where the program resides and parameter
+{\tt progInt\_addr} is the internal (to Versat) memory address where
+it should be transferred; parameter {\tt progSize} is the kernel size
+in 32-bit words.
+
+Next, the {\tt versat\_wait()} function is called for waiting until
+Versat has finished the last command. In this case, it guarantees that
+the kernel code is already in the program memory, so that Versat is ready
+to execute the next command.
+
+Then, the {\tt versat\_run()} function is called to start execution. A
+FFT kernel is used as the example. The first parameter, {\tt FFT},
+identifies the kernel to be run. It is actually the address of the
+kernel in Versat's program memory. Parameters {\tt x\_ptr}, {\tt
+  w\_ptr} and {\tt X\_ptr} indicate the location of the input and
+output vectors in the external memory. The FFT is computed over a
+complex dataset of {\tt Npts} points, using windows of size {\tt
+  WindowSize}, where two consecutive windows overlap by {\tt Overlap}
+points.
+
+While Versat is running, some host code could be put before calling
+the {\tt versat\_wait()} function again, as this code will execute in
+parallel with Versat if it does to take more time than the Versat
+kernel. When the {\tt versat\_wait()} function exits the FFT
+computation is done and one may add some post-processing code before
+exiting the host program.
+
+
+% ----------------------------------------------------------------------
+\section{Comparison with other architectures}
+\label{section:progComparisonWOtherArchitectures}
+
+Versat is the only known CGRA that can be programmed in assembly
+language. It supports configurations pre-compiled, i.e., is capable of
+using configurations that are stored in the external memory, by
+transferring them into its own configuration memory like other
+architectures that can only be full reconfigured by transferring
+configurations~\cite{Lee00,Mei05,Hartenstein99}. As it is able to
+perform {\em self and partial reconfiguration}, i.e., generate
+configurations on the fly and use highly sophisticated reconfiguration
+mechanisms to partially modify them, since they use to be similar to
+each other. Unlike some other architectures that use inefficient
+reconfiguration mechanisms and some of them are very recommended not
+be used~\cite{Ebeling96,Weinhardt03,Liu15}.
+
+In conclusion, Versat is a very capable architecture of perform {\em
+  self and partial reconfiguration} on the fly. It works as a
+co-processor used to accelerate data computation, attached to a host
+system who calls it by using some procedures stored in the Versat's
+library ({\tt versat.h}). It is quite independent from the host system
+for generating configurations and transfer the data to/from the
+external memory, freeing the host for other useful computations.

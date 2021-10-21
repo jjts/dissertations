@@ -1,0 +1,202 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                      %
+%     File: Thesis_Conclusions.tex                                     %
+%     Tex Master: Thesis.tex                                           %
+%                                                                      %
+%     Author: Andre C. Marta                                           %
+%     Last modified :  2 Jul 2015                                      %
+%                                                                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Conclusions}
+\label{chapter:conclusions}
+
+In this report, a study of the most used audio Asynchronous Sample Rate
+Conversion (ASRC) algorithm and a preliminary hardware implementation is
+presented. The circuit is described in Verilog and will be prototyped in
+FPGA. The objective is to design a multi-channel sample rate converter
+Intellectual Property (IP) module which can be integrated in System on Chip. An
+ASRC is a rather complex circuit and only major semiconductor players such as
+Cyrrus Logic, Analog Devices and Texas Instruments have Integrated Circuit (IC)
+solutions available in the market. To the best of our knowledge the only
+existing ASRC IPs in the market, the CWda5x family, is made available by
+Coreworks, SA. According to the CWda5x documentation, there is much room for
+improvements, which are studied in detail in this thesis.
+
+ASRC algorithms require high numeric precision to ensure the quality of the
+audio signal, given the high sensitivity of the human auditory system. There are
+two major sources of imprecision: (1) the precision of the time measurements
+needed to determine the sampling instant; (2) the precision of the filter
+coefficients, obtained from an ideal low pass filter impulse response (sinc
+function), since they vary with the exact instant when the output sample is
+computed.
+
+Once the output sample issue time is determined, the computation of the output
+sample may proceed synchronously. As a consequence, synchronous sample rate
+converter IPs can easily be derived from the present work, since this type of
+converter is a sub part of the a full ASRC solution. Synchronous sample rate
+converters find many applications in digital audio to operate on stored signals
+for which the sample rate is known \textit{a priori}.
+
+The high precision demands of ASRC algorithms tends to undesirably increase the
+hardware area occupation and computation time. The solution which will be further
+explored in the following master's dissertation will need to compromise between
+signal fidelity and resources usage.
+
+% ----------------------------------------------------------------------
+\section{Achievements}
+\label{section:achievements}
+
+A research about sample rate converters has been conducted, emphasizing the
+distinction between synchronous and asynchronous converters. In fact synchronous
+sample rate converters are a sub part of asynchronous sample rate converters in
+the sense that they do not need to dynamically determine the sample rate of the
+input signal, nor do they need to perform dynamic computation as they could
+perform the calculation using predetermined filter coefficients. Note however,
+that the number of fixed coefficient sets may be rather large if the repetition
+period (in samples) of the sampling instant relative to the phase of the input
+signal is large.
+
+Asynchronous sample rate converters involve a more complex algorithm, using more
+hardware resources to dynamically determine the output sample instants. However,
+this type of converters is very useful as they can work on input signals for
+which the sample rate is unknown. They are also able to compensate deviations on
+the input or output clocks while maintaining the same hardware.
+
+To fully understand the principle on which the algorithm is based, some basic
+digital signal processing principles are reviewed, with emphasis on digital
+signal filtering, as well as the implications of sampling and aliasing. This
+study made it possible to derive the specifications of the digital resampling
+filter in terms of its type, cutoff frequency and phase response.
+
+To implement the synchronous converter in hardware, some filter structures were
+analyzed, with emphasis on their advantages and disadvantages. While the Farrow
+structure is the hardest to implement, it is also the most versatile, and the
+one which may lead to a smaller total harmonic distortion plus noise ratio,
+while maintaining a low area and computational cost.
+
+The asynchronous nature of the algorithm dictates the need to work with multiple
+clock domains, which is as complex as it can get in terms of digital hardware
+design. In the chosen implementation 3 different clock domains are used: the
+input, output and processing clock domains. Different types of hardware
+synchronizers using registers and dual-port memories are employed.
+
+
+% ----------------------------------------------------------------------
+\section{Future Work}
+\label{section:future}
+
+The work to be developed in the thesis consists in creating a sample rate
+converter design which is able to dynamically convert sample rates which may vary
+over time. The core should occupy as less hardware resources as possible, and
+have an audio fidelity on par with the current integrated circuit
+implementations. Furthermore, it shall be possible to configure the core using
+the AXI-Lite interface, as well as sending and receiving audio samples using a
+parallel/I2S interface. With this implementation it should be possible to
+implement the core in FPGAs and SoCs. The work plan is shown in
+Table~\ref{tab:planning}, together with the scheduling for each task.
+
+\begin{table}[!htbp]
+	\centering
+	\caption{Planning of the work that will be performed in the thesis}
+	\label{tab:planning}
+	\begin{tabular}{|p{8cm}|l|}
+		\hline
+		\textbf{Task}                                                                            & \textbf{Schedule} \\
+		\hline
+		Improve sample rate converter prototype, fulfilling specifications for main sample rates          & 17/02 - 15/03       \\
+		\hline
+		Implement ratio estimator into sample rate converter                                              & 16/03 - 12/04       \\
+		\hline
+		Insert pipelines and control units into core to increase its system clock frequency               & 13/04 - 19/04       \\
+		\hline
+		Optimize core to decrease FPGA resources usage                                                    & 20/04 - 03/05       \\
+		\hline
+		Design and implement interfaces                                                               & 04/05 - 10/05       \\
+		\hline
+		Test and debug core in FPGA                                                                       & 11/05 - 31/05       \\
+		\hline
+		Write the Thesis report                                                                           & 1/06 - 19/07       \\
+		\hline
+	\end{tabular}
+\end{table}
+
+The first step of this work is the improvement of the prototype, as it already
+contains the fractional delay filter implementation, as well as most of the
+modules defined in Chapter~\ref{chapter:circ_design}.  This step is considered
+finished when the prototype is able to output a signal with a total harmonic
+distortion and noise ratio equal or lower than $\SI{-130}{\dB}$ for all
+combinations involving the commonly used sample rates outlined in
+Table~\ref{tab:common_samp_rates}.
+
+
+\begin{table}[!htbp]
+	\centering
+	\caption{Commonly used sample rates in audio applications and their particular uses}
+	\label{tab:common_samp_rates}
+	\begin{tabular}{|l|p{8cm}|}
+		\hline
+		\textbf{Sample Rate} & \textbf{Use} \\
+		\hline
+		$\SI{8.000}{\kilo\hertz}$ & Telephones/walkie-talkies.\\
+		\hline
+                $\SI{11.025}{\kilo\hertz}$ & Lower-quality PCM, MPEG audio and analizers of subwoofer bandpasses.\\
+		\hline
+                $\SI{16.000}{\kilo\hertz}$ & VoIP and VVoIP applications.\\
+		\hline
+                $\SI{22.050}{\kilo\hertz}$ & Lower-quality PCM, MPEG audio and low frequency energy analizers.\\
+		\hline
+                $\SI{32.000}{\kilo\hertz}$ & miniDV camcorders, and some video tapes. Also used for high-quality wireless microphones.\\
+		\hline
+                $\SI{44.100}{\kilo\hertz}$ & Audio CDs, most used with MPEG-1 audio (VCD, MP3) covers the audible bandwidth (up to $\SI{20}{\kilo\hertz}$.\\
+		\hline
+                $\SI{48.000}{\kilo\hertz}$ & Professional digital video equipment and consumer video formats, like digital TV, DVD and films.\\
+		\hline
+                $\SI{88.200}{\kilo\hertz}$ & Some professional recording equipment that targets CD, such as mixers or equalizers.\\
+		\hline
+                $\SI{96.000}{\kilo\hertz}$ & High definition DVD and blu-ray audio tracks.\\
+		\hline
+                $\SI{176.400}{\kilo\hertz}$ & High definition CD recorders and other applications targeting CD.\\
+		\hline
+                $\SI{192.000}{\kilo\hertz}$ & Professional video equipment targeting high definition DVD and blu-ray audio tracks.\\
+		\hline
+	\end{tabular}
+\end{table}
+
+With a prototype capable of fulfilling the output fidelity specification for a
+synchronous ASRC, the next step consists in adding the ratio estimator, making
+it possible to convert sample rates dynamically. This means supporting sample rate
+changes over time, while maintaining the output fidelity. This step
+should also include the optimization of this module to ensure that it stabilizes
+as fast as possible. After this step, the prototype can be considered complete,
+although poorly optimized.
+
+With an inefficient prototype, the next two steps are focused on optimization.
+Firstly, pipelines will be added, as well as other timing closure oriented
+optimizations, in order to enlarge the range of the system clock (processing)
+frequency as much as possible for maximum usage flexibility and capability to
+support multiple channels.
+
+The second optimization step consists in optimizing the FPGA resource usage,
+which indirectly leads to a compact ASIC implementation. Firstly, the widths of
+the intermediate buses will be reduced as much as possible. This will create a
+trade-off with the output's harmonic distortion and noise ratio, since narrower
+buses will raise the quantization errors. The $\SI{-130}{\dB}$ will be used as
+a reference to limit the reduction in the width of the buses. Afterwards, some
+further optimizations will be done, through resource sharing and Verilog code
+optimization. These optimizations should be done without impacting the
+algorithm's execution time, as computing less samples per output sample clock
+cycle leads to supporting less audio channels.
+
+After all optimizations are done, the core needs to be implemented and tested in
+a FPGA. To properly conduct the tests, and also to facilitate the integration in
+any system, standard interfaces will be designed and implemented, using the
+AXI-Lite interface for control and the $I^2S$ interfaces for the audio. With the
+standard interface in place, the core will be integrated in a System-on-Chip
+containing a RISC-V processor.
+
+With the sample rate converter fully implemented and integrated, the final step
+is to conduct system-level tests using both test signals and audio files send
+from a PC. After system test, the sample rate converter IP core will be deemed
+complete, and its documentation including the thesis to be written will be
+finalized.

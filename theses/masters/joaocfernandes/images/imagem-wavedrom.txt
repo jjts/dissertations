@@ -1,0 +1,10 @@
+{signal: [
+  {    name: 'clk',   wave: 'pPPpPPPPPPPp'},
+  ['Master',
+   {name: 'cw_link_rx[31:0]',  wave: 'x5x.45x333x.', data: 'D1 D2 D3 D4_1 D4_2 D4_3'},
+   {name: 'cw_req_vector_rx[7:0]', wave: '252.4523..2.', data: '0x00 0x01 0x00 0x02 0x04 0x00 0x08'},
+   {name: 'cw_ack_vector_rx[7:0]',  wave: '2.52.4523..2', data: '0x00 0x01 0x00 0x02 0x04 0x00 0x08'},
+  ],
+  {},
+]
+   }

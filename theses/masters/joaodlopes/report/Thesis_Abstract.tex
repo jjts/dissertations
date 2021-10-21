@@ -1,0 +1,47 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                      %
+%     File: Thesis_Abstract.tex                                        %
+%     Tex Master: Thesis.tex                                           %
+%                                                                      %
+%     Author: João D. Lopes                                            %
+%     Last modified :  18 May 2016                                     %
+%                                                                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Abstract}
+
+% Add entry in the table of contents as section
+\addcontentsline{toc}{section}{Abstract}
+
+This thesis describes Versat, a reconfigurable hardware accelerator
+for embedded systems, for which this work substantially contributed.
+Versat is a small and low power Coarse Grained Reconfigurable Array
+architecture (CGRA), which implements self and partial reconfiguration
+by using a simple controller unit. This approach targets ultra-low
+energy applications such as those found in Wireless Sensor Networks
+(WSNs), where using a GPU or FPGA accelerator is out of the
+question. Compared to other CGRAs, Versat has a smaller number of
+functional units interconnected in a full graph topology for maximum
+flexibility. The lower number of functional units is compensated by
+the ease of configuration and runtime reconfiguration. Unlike other
+CGRAs, Versat can map sequences of nested program loops instead of a
+single program loop at a time; self and partial reconfiguration
+happens between the nested loops. Versat can be programmed in assembly
+language and using a C++ dialect. Assembly programmability is a novel
+and useful feature for program optimization and working around
+compiler or architectural issues. This work contributed to the design
+of the whole system, with special emphasis on verification, debug,
+timing closure, multi-threading at the datapath level, boot loader
+coding, DMA, AXI interfaces, benchmark coding and regression testing.
+Results on a set of benchmarks show that Versat can accelerate single
+configuration kernels by 4x with one order of magnitude energy
+consumption improvement compared to a state-of-the-art processor. For
+multiple configuration kernels the improvements are even better: 20x
+acceleration with up to 2 orders of magnitude better energy
+efficiency.
+
+\vfill
+
+\textbf{\Large Keywords:} Reconfigurable Computing, Coarse Grained
+Reconfigurable Arrays, Embedded Systems, Low Power Systems
+
