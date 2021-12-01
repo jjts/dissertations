@@ -31,3 +31,9 @@
 [submodule "theses/masters/pteixeira"]
 	path = theses/masters/pteixeira
 	url = git@github.com:pedrompt97/master_thesis.git
+[submodule "theses/masters/jroque"]
+	path = theses/masters/jroque
+	url = git@github.com:jjts/dissertations.git
+[submodule "theses/masters/josefernandes"]
+	path = theses/masters/josefernandes
+	url = git@github.com:Jowjowf/thesis.git
