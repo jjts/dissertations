@@ -13,9 +13,6 @@
 [submodule "theses/masters/amerendeira"]
 	path = theses/masters/amerendeira
 	url = git@github.com:AndreMerendeira/thesis.git
-[submodule "theses/masters/jroque"]
-	path = theses/masters/jroque
-	url = git@bitbucket.org:JVRoque/thesis-jroque.git
 [submodule "theses/masters/joaofreirecardoso"]
 	path = theses/masters/joaofreirecardoso
 	url = git@bitbucket.org:nikrard/thesis.git
